@@ -22,22 +22,22 @@ h1 em {
 }
 
 .twelve h1 {
-  	font-size: 30px;
-  	font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    width: 205px;
-    text-align: left;
-    margin: 50px;
-    white-space: nowrap;
-    padding-bottom: 13px;
+  font-size:40px; 
+  font-weight:700;  
+  letter-spacing:1px; 
+  text-transform:uppercase; 
+  width:270px; 
+  text-align:center; 
+  margin:auto; 
+  white-space:nowrap; 
+  padding-bottom:13px;
 }
 .twelve h1:before {
     background-color: #c50000;
     content: '';
     display: block;
     height: 3px;
-    width: 75px;
+    width: 80px;
     margin-bottom: 5px;
 }
 .twelve h1:after {
@@ -48,6 +48,36 @@ h1 em {
     height: 3px;
     width: 75px;
     margin-bottom: 0.25em;
+}
+
+a {
+    text-decoration: none;
+}
+
+#nav1 {
+    text-align: center;
+}
+
+#nav1 > ul {
+    list-style-type: none;
+    display: inline-block;
+}
+
+#nav1 > ul li {
+    float: left;
+    padding: 0 50px;
+    line-height: 80px;
+    font-size: 16px;
+}
+
+#nav1 > ul li a {
+	font-weight: 550;
+    color: gray; /* 일반적인 색상 */
+    text-decoration: none; /* 밑줄 제거 */
+}
+
+#nav1 > ul li a:hover {
+    color: black; /* 마우스를 올렸을 때의 색상 */
 }
 
 body {
