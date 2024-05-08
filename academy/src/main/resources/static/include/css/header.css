@@ -80,6 +80,6 @@ a {
     color: black; /* 마우스를 올렸을 때의 색상 */
 }
 
-body {
-	height: 1300px;
+html, body {
+    height: 100%
 }

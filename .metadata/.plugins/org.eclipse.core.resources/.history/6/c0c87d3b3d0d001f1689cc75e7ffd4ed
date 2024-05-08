@@ -1,0 +1,11 @@
+#wrap {
+    min-height: calc(100vh - 10rem); /* 화면 높이에서 footer의 높이를 뺀 값 */
+    position: relative;
+}
+
+footer {
+    bottom: 0;
+    position: absolute;
+    height: 10rem;
+    background: yellow;
+}

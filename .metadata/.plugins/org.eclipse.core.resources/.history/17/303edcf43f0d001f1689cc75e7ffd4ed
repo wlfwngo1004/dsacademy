@@ -1,0 +1,23 @@
+html, body {
+    height: 100%
+}
+
+#wrap {
+    min-height: 100%;
+    position: relative;
+    padding-bottom: 60px;
+}
+
+footer {
+    bottom: 0;
+    background-color: #f2f2f2;
+}
+
+footer .company-info h2 {
+    font-size: 20px;
+}
+
+footer p {
+    font-size: 14px;
+    margin: 0;	
+}
