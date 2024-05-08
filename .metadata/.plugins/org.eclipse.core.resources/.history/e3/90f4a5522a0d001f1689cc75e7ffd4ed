@@ -1,0 +1,216 @@
+button {
+	background-color : transparent;
+    border : none;
+    cursor: pointer;
+}
+.wrapper > h2 {
+    font-size: 30px;
+    margin-left: 50px;
+}
+.refrigerator-container {
+    display: block;
+    grid-template-columns: repeat(5, 1fr);
+    grid-row-gap: 80px;
+    grid-column-gap: 10px;
+    justify-items: center;
+}
+.refrigerator-card {
+    position: relative;
+    width: 100%;
+    padding: 0 25px 25px 25px;
+    background-color: #ffffff;
+    margin-top: 50px;
+
+}
+.refrigerator-card > h3 {
+    margin: 20px 20px 20px 50px; 
+    font-size: 25px;
+    font-weight: normal;
+}
+.content-container {
+    height: 400px;
+    border-radius: 30px;
+    background-color: rgba(231, 197, 93, 0.301);
+}
+.pBox {
+	padding-top: 50px;
+	padding-left: 70px;
+}
+.pTop {
+	padding-top: 50px;
+}
+#content-list > li {
+    margin-bottom: 10px;
+}
+#content-list > li::before{
+    content: "\f2e7";
+    font-family: "FontAwesome";
+    margin-right: 1em;
+    /* margin-left: -1.5em; */
+}
+#content-list > li > a{
+    color: black;
+    font-size: 20px;
+}
+#content-list > li > a:hover{
+    color : rgb(249, 97, 2);
+    font-size: 23px;
+}
+
+label {
+    font-size: 20px;
+}
+.food-container {
+    overflow: scroll;
+    max-height: 300px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+}
+.food-container > div {
+    margin: 5px 0 5px 0;
+}
+.searchBox {
+	display: flex;
+	justify-content: end;
+	padding: 10px 0 10px 0;
+}
+.searchBox #searchInput {
+	width: 200px;
+	height: 50px;
+	border-radius: 30px;
+	padding: 0 1em; 
+  	border: 1px solid sandybrown;
+  	outline: none;
+  	font-size: 15px;
+}
+
+.searchBox #searchBtn {
+    margin-top: 15px;
+}
+
+.searchBox #searchBtn::before{
+	content: "\f002";
+    font-family: "FontAwesome";
+    font-size: 25px;
+}
+.display-Box {
+	display: flex;
+    justify-content: space-between;
+    padding-right: 50px;
+}
+.h3-Box {
+    margin: 20px 20px 20px 50px;
+    font-size: 25px;
+    font-weight: normal;
+}
+#recommedRecipeBtn{
+	width: 200px;
+    height: 50px;
+    border: none;
+    border-radius: 30px;
+    font-size: 20px;
+    font-family: Cafe24Ssurround;
+    color: coral;
+    background-color: #ffff;
+    border: 1px solid;
+    cursor: pointer;
+}
+.content-memo {
+	border: none;
+    resize: none;
+    width: 1055px;
+    height: 350px;
+    border-radius: 5px;
+    font-size: 20px;
+}
+.content-memo:focus {
+    outline: none;
+}
+
+.memo-bg {
+	background-color: rgba(0,0,0,0.2);
+    border-radius: 5px;
+    height: 355px;
+    width: 1060px;
+    position: absolute;
+    left: 95px;
+    top: 101px;
+    transition: background-color 0.3s;
+    display: flex;
+    justify-content: center;
+}
+.memo-none{
+	display: none;
+}
+.memo-bg:hover{
+    background-color: rgba(0,0,0,0.3);
+    border-radius: 5px;
+}
+#memoBtn {
+	font-size: 60px;
+	color :  rgba(0,0,0,0.3);
+	width: 100%;
+}
+#memoBtn:hover {
+	background-color: none;
+	font-size: 65px;
+	color :  black;
+}
+.recipeList {
+	margin-left: 50px;
+	overflow: scroll;
+    height: 400px;
+}
+#item-template{
+	display:none;
+}
+#addTemplate{
+	display:none;
+}
+#content-list {
+	display:none;
+}
+#msg {
+	font-size: 15px;
+	color: gray;
+	margin-left: 10px;
+	display: block;
+}
+.container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.container > div {
+    width: 400px;
+    height: 500px;
+    border: 1px solid black;
+    text-align: center;
+    overflow: auto;
+}
+.igrBtn, .rfgBtn {
+    background-color : transparent;
+    border : none;
+    height: 30px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size : 20px;
+}
+.igrBtn:hover , .rfgBtn:hover{
+    color: orange;
+}
+
+.removeBtn {
+	/* 선택된버튼 클래스*/
+	color:Orange;
+	text-decoration:line-through;
+	text-decoration-color:red;
+	text-decoration-thickness:3px;
+	font-size : 20px;
+}
+.clearBtn {
+	color: black;
+	text-decoration:none;
+	font-size : 20px;
+}
+
