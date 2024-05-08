@@ -3,9 +3,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <title>Insert title here</title>
 </head>
 <body>
-ddd
+	<%@ include file="/WEB-INF/views/header.jsp" %>
+	dddddadsfasdfasdf
+	<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>
