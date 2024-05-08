@@ -20,7 +20,6 @@ INDEX VERSION 1.131+C:\SelfStudy\다슬학원\.metadata\.plugins\org.eclipse.jdt.cor
 1981229630.index
 2590947230.index
 4273106812.index
-1407254027.index
 3494844985.index
 2580187270.index
 1777528187.index
