@@ -10,8 +10,18 @@
 <body>
 	<header>
 		<div class="twelve">
-  			<h1>DS ACADEMY</h1>
-		</div>
+	        <a href="/" class="logo-link"><h1>DS ACADEMY</h1></a>
+	          <nav id="nav1">
+			    <ul>
+			      <li><a href="/">홈</a></li>
+			      <li><a href="/">강좌</a></li>
+			      <li><a href="/">Q&A</a>
+			      <li><a href="/">학원위치</a></li>
+			      <li><a href="/">로그인</a></li>
+			      <li><a href="/">회원가입</a></li>
+			    </ul>
+			  </nav>
+    	</div>
 	</header>
 </body>
 </html>
