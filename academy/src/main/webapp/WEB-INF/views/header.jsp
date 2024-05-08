@@ -5,9 +5,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link rel="stylesheet" type="text/css" href="/include/css/header.css">
-<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="/include/css/footer.css">
+<title>DS ACADEMY</title>
 </head>
 <body>
+	<div class="wrap">
 	<header>
 		<div class="twelve">
 	        <a href="/" class="logo-link"><h1>DS ACADEMY</h1></a>
@@ -23,5 +25,3 @@
 			  </nav>
     	</div>
 	</header>
-</body>
-</html>
