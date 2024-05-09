@@ -1,0 +1,5 @@
+package com.ds.academy.client.member.controller;
+
+public class MemberController {
+
+}
