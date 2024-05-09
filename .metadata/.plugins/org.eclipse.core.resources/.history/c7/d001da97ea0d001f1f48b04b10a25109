@@ -1,0 +1,22 @@
+h3{
+	font-family: sans-serif;
+	position: absolute;
+	left: 150px;
+	animation: slide 1s ease-out;
+}
+
+.thumbnails{
+	padding-left: 170px;
+}
+
+
+@keyframes slide{
+	from{
+		left: -100px;
+		opacity: 0;
+	}
+	to{
+		left: 150px;
+		opacity: 1;
+	}
+}

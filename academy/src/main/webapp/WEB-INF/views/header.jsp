@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link rel="stylesheet" type="text/css" href="/include/css/header.css">
 <link rel="stylesheet" type="text/css" href="/include/css/footer.css">
+<link rel="stylesheet" type="text/css" href="/include/css/main.css">
 <title>DS ACADEMY</title>
 </head>
 <body>

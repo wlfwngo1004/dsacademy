@@ -1,0 +1,17 @@
+h3{
+	font-family: sans-serif;
+	position: absolute;
+	left: 50px;
+	animation: slide 2s ease-out;
+}
+
+@keyframes slide{
+	from{
+		left: -100px;
+		opacity: 0;
+	}
+	to{
+		left: 50px;
+		opacity: 1;
+	}
+}

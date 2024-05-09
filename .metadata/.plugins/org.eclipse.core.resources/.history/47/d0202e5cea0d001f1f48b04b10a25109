@@ -1,0 +1,20 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+	
+	<%@ include file="/WEB-INF/views/header.jsp" %>
+	
+	<div class="content">
+		<div class="fixed_img_col">
+			<h3>인기클래스 BEST4</h3><br><br><br><br>
+				<ul>
+					<a href="/">
+						<span class="thumb">
+							<img src="	https://www.njobler.net/public/uploads/asp/2001/pr…8%B0%EC%82%AC-%ED%95%84%EA%B8%B0.jpg?v=1699517488" art="">
+							<em>Category</em>
+						</span>
+					</a>
+				</ul>
+		</div>
+	</div>
+
+	<%@ include file="/WEB-INF/views/footer.jsp" %>
+
