@@ -1,0 +1,18 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+	
+	<%@ include file="/WEB-INF/views/header.jsp" %>
+	
+	<div class="content">
+		<div class="course">
+			<h3>인기클래스 BEST4</h3><br><br>
+				<div class="thumbnails">
+		            <div class="thumbnail">
+		                <img src="강좌1.jpg" alt="강좌 1">
+		                <p>강좌 설명 1</p>
+		            </div>
+            	</div>
+		</div>
+	</div>
+
+	<%@ include file="/WEB-INF/views/footer.jsp" %>
+

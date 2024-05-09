@@ -1,0 +1,56 @@
+h3{
+	font-family: sans-serif;
+	position: absolute;
+	left: 150px;
+	animation: slide 1s ease-out;
+}
+
+
+.fixed_img_col {
+  position: relative;
+}
+
+.fixed_img_col .thumbnail_img:first-child {
+  position: relative; /* 상대적 위치 */
+}
+
+.fixed_img_col h3 {
+  font-family: sans-serif;
+  position: absolute;
+  top: 50%; /* 부모 요소의 중앙에 위치시키기 위해 */
+  left: 50%; /* 부모 요소의 중앙에 위치시키기 위해 */
+  transform: translate(-50%, -50%); /* 수평 및 수직 가운데 정렬 */
+  animation: slide 1s ease-out;
+}
+
+.fixed_img_col ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.fixed_img_col ul li {
+  margin-right: 50px;
+}
+
+.fixed_img_col ul li:last-child {
+  margin-right: 0;
+}
+
+.thumbnail_img {
+  width: 200px;
+}
+
+
+@keyframes slide{
+	from{
+		left: -100px;
+		opacity: 0;
+	}
+	to{
+		left: 150px;
+		opacity: 1;
+	}
+}

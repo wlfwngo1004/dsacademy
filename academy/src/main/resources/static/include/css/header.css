@@ -29,6 +29,7 @@ h1 em {
   width:270px; 
   text-align:center; 
   margin:auto; 
+  margin-top: 10px;
   white-space:nowrap; 
   padding-bottom:13px;
 }
@@ -56,6 +57,7 @@ a {
 
 #nav1 {
     text-align: center;
+    margin-bottom: 50px;
 }
 
 #nav1 > ul {

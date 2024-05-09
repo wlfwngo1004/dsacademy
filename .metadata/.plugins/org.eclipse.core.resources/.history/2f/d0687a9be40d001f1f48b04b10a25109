@@ -1,0 +1,14 @@
+h3{
+	font-family: sans-serif;
+	position: absolute;
+	left: 50px;
+}
+
+@keyframes slide{
+	from{
+		left: -100px;
+	}
+	to{
+		left: 50px;
+	}
+}
