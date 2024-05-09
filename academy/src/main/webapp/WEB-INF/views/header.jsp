@@ -20,7 +20,7 @@
 			      <li><a href="/">강좌</a></li>
 			      <li><a href="/">Q&A</a>
 			      <li><a href="/">학원위치</a></li>
-			      <li><a href="/">로그인</a></li>
+			      <li><a href="/member/loginForm">로그인</a></li>
 			      <li><a href="/">회원가입</a></li>
 			    </ul>
 			  </nav>
