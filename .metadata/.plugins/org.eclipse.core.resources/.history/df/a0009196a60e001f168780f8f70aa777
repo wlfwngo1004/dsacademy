@@ -1,0 +1,40 @@
+#wrap2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+}
+
+.loginCss {
+	width:300px;
+    text-align: left;
+}
+
+label {
+    width: 295px; /* 원하는 너비로 설정 */
+    text-align: left;
+    display: inline-block; /* 너비를 적용하기 위해 블록 요소로 변경 */
+}
+
+input {
+	width: 295px;
+	height: 40px;
+	margin-top: 5px;
+}
+
+#inputPwd{
+	margin-bottom: 10px;
+}
+
+#textRight{
+	text-align: left;
+}
+
+#loginBtn{
+	width: 295px;
+	height: 40px;
+	background-color: #5bc0de; /* 연한 파랑색 배경색 */
+    font-weight: bold; /* 글씨 두껍게 */
+    color: #fff; /* 흰색 글씨색 */
+}
