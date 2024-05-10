@@ -51,10 +51,6 @@ input {
     transition: background-color 0.3s; /* 배경 색상 변경 시 부드러운 전환 효과 */
 }
 
-#loginBtn:hover {
-    background-color: #2980b9; /* 마우스를 올렸을 때 더 진한 파랑색 배경 색상 */
-}
-
 #naverLogin{
 	display: inline-block;
     padding: 10px 20px;

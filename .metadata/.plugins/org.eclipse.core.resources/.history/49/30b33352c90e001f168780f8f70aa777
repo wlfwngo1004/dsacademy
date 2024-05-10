@@ -30,6 +30,10 @@ input {
 	margin-bottom: 10px;
 }
 
+#textRight{
+	text-align: left;
+}
+
 #css1{
 	display: flex;
     justify-content: space-between;
@@ -40,19 +44,13 @@ input {
 
 #loginBtn{
 	width: 395px;
-    height: 40px;
-    background-color: #3498db; /* 기본 배경 색상 */
+	height: 40px;
+	background-color: #3498db; /* 더 진한 파랑색 배경색 */
     font-weight: 800; /* 글씨 두꺼워지도록 */
     color: #fff; /* 흰색 글씨색 */
     border: none; /* 테두리 제거 */
     margin-bottom: 20px;
     border-radius: 5px;
-    cursor: pointer; /* 마우스 커서 모양 변경 */
-    transition: background-color 0.3s; /* 배경 색상 변경 시 부드러운 전환 효과 */
-}
-
-#loginBtn:hover {
-    background-color: #2980b9; /* 마우스를 올렸을 때 더 진한 파랑색 배경 색상 */
 }
 
 #naverLogin{
