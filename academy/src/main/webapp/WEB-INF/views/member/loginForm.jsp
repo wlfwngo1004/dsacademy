@@ -1,3 +1,6 @@
+<%@ page import="java.net.URLEncoder" %>
+<%@ page import="java.security.SecureRandom" %>
+<%@ page import="java.math.BigInteger" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -5,7 +8,8 @@
 <link rel="stylesheet" type="text/css" href="/include/css/loginForm.css">
 
 <script type="text/javascript">
-
+	
+	
 	function placeholderEvent(inputElement) {
 	    inputElement.click(function(){
 	        if ($(this).val() == '') {
@@ -47,15 +51,26 @@
 	    			<div id="textRight">
                         <button class="btn btn-primary" type="button" id="loginBtn">로그인</button>
                     </div>
+                    <div id="css1">
+                    <a href="/member/loginForm" id="join">회원가입</a>
                     <a href="/member/loginForm" id="find_pwd">비밀번호 찾기</a>
+                    </div>
 	    		</form>
 	    	</div>
 	    	<div>
-	    		<a href="/member/loginForm" id="naverLogin">
+	    		<a href="${naverUrl}" id="naverLogin">
 	    			<span class="icon">
 	    				<img src="/image/naverIcon.png" alt="naver">
 	    			</span>
 	    			네이버로 로그인
+	    		</a>
+	    	</div>
+	    	<div>
+	    		<a href="/member/loginForm" id="kakaoLogin">
+	    			<span class="icon">
+	    				<img src="/image/kakaoIcon.png" alt="kakao">
+	    			</span>
+	    			카카오로 로그인
 	    		</a>
 	    	</div>
     </div>
