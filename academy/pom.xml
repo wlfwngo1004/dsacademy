@@ -85,6 +85,9 @@
 		    <groupId>org.apache.tomcat.embed</groupId>
 		    <artifactId>tomcat-embed-jasper</artifactId>
 		</dependency>
+		
+		<!-- json 사용 의존성-->
+		
 	</dependencies>
 
 	<build>

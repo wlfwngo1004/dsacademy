@@ -1,8 +1,0 @@
-#wrap2 {
-    width: 100%;
-	text-align: center;
-}
-
-.loginCss{
-	width: 100px;
-}

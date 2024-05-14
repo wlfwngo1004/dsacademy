@@ -1,0 +1,5 @@
+package com.ds.academy.client.naverlongin.controller;
+
+public class NaverLoginController {
+
+}
