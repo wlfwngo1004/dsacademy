@@ -18,8 +18,8 @@
 			    <ul>
 			      <li><a href="/">홈</a></li>
 			      <li><a href="/">강좌</a></li>
-			      <li><a href="/">Q&A</a>
-			      <li><a href="/">학원위치</a></li>
+			      <li><a href="/member/naver/getProfile">Q&A</a>
+			      <li><a href="/member/naver/invalidate">학원위치</a></li>
 			      <li><a href="/member/loginForm">로그인</a></li>
 			      <li><a href="/">회원가입</a></li>
 			    </ul>
