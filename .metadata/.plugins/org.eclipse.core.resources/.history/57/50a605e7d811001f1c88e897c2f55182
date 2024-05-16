@@ -1,0 +1,33 @@
+package com.ds.academy.client.naver.controller;
+
+import java.io.IOException;
+import java.text.ParseException;
+
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import com.ds.academy.client.member.service.NaverService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("/naver/*")
+public class NaverLoginController {
+	
+	private final NaverService naeverService;
+	
+	@GetMapping("/callback")
+	public String callback(HttpSession session, HttpServletRequest request, Model model) throws IOException, ParseException{
+		
+		String code = request.getParameter("code");
+		
+		
+		return "member/check";
+	}
+	
+}

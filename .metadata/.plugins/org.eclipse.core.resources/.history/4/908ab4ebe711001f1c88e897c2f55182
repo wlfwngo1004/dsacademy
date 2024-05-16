@@ -1,0 +1,82 @@
+package com.ds.academy.client.naver.controller;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.text.ParseException;
+import java.util.Map;
+
+import org.json.simple.parser.JSONParser;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import com.ds.academy.client.member.service.NaverService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("/naver/*")
+public class NaverLoginController {
+	
+	private final NaverService naverService;
+	
+	@GetMapping("/callback")
+	public String callback(HttpSession session, HttpServletRequest request, Model model) throws IOException, ParseException{
+		
+		String code = request.getParameter("code");
+		String state = request.getParameter("state");
+		String redirectURI = URLEncoder.encode("http://localhost:8080/naver/callback", "UTF-8"); // 보안 및 데이터 무결성을 위해 인코딩
+		
+		String apiURL = naverService.getAccessToken(code, state, redirectURI);
+		System.out.println("apiURL="+apiURL);
+		
+		String res = requestToServer(apiURL);
+		if(res != null && !res.equals("")) {
+			model.addAttribute("res", res);
+			
+		}
+		
+		return "member/check";
+	}
+	
+	private String requestToServer(String apiURL) throws IOException {
+	    return requestToServer(apiURL, "");
+	  }
+	
+	private String requestToServer(String apiURL, String headerStr) throws IOException {
+	    URL url = new URL(apiURL);
+	    HttpURLConnection con = (HttpURLConnection)url.openConnection();
+	    con.setRequestMethod("GET");
+	    System.out.println("header Str: " + headerStr);
+	    if(headerStr != null && !headerStr.equals("") ) {
+	      con.setRequestProperty("Authorization", headerStr);
+	    }
+	    int responseCode = con.getResponseCode();
+	    BufferedReader br;
+	    System.out.println("responseCode="+responseCode);
+	    if(responseCode == 200) { // 정상 호출
+	      br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+	    } else {  // 에러 발생
+	      br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+	    }
+	    String inputLine;
+	    StringBuffer res = new StringBuffer();
+	    while ((inputLine = br.readLine()) != null) {
+	      res.append(inputLine);
+	    }
+	    br.close();
+	    if(responseCode==200) {
+	      return res.toString();
+	    } else {
+	      return null;
+	    }
+	  }
+	
+}

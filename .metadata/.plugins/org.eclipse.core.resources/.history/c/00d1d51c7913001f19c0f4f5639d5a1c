@@ -1,0 +1,51 @@
+package com.ds.academy.client.naver.controller;
+
+
+
+
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.text.ParseException;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import com.ds.academy.client.member.service.NaverService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("/naver/*")
+public class NaverLoginController {
+	
+	
+	
+	private final NaverService naverService;
+	
+	@GetMapping("/callback")
+	public String callback() {
+		
+		/*
+		 * String code = request.getParameter("code"); String state =
+		 * request.getParameter("state"); String redirectURI =
+		 * URLEncoder.encode("http://localhost:8080/naver/callback", "UTF-8");
+		 * 
+		 * String accessToken = naverService.getAccessToken(code, state, redirectURI);
+		 * System.out.println(accessToken);
+		 */
+		
+		return "member/check";
+		
+	}
+	@RequestMapping("/naver/invalidate")
+	  public String invalidateSession(HttpSession session) {
+	    session.invalidate();
+	    return "redirect:/naver";
+	  }
+	
+	
+}

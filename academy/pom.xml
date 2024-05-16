@@ -87,6 +87,18 @@
 		</dependency>
 		
 		<!-- json 사용 의존성-->
+		<dependency>
+		    <groupId>com.googlecode.json-simple</groupId>
+		    <artifactId>json-simple</artifactId>
+		    <version>1.1.1</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+		<dependency>
+		    <groupId>org.json</groupId>
+		    <artifactId>json</artifactId>
+		    <version>20210307</version> <!-- 현재 버전으로 업데이트 필요 -->
+		</dependency>
 		
 	</dependencies>
 
