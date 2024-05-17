@@ -1,0 +1,11 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* 화면의 높이만큼 컨테이너를 채움 */
+}
+
+#myForm {
+    width: 400px; /* 원하는 폭으로 조정 */
+    height: 200px; /* 원하는 높이로 조정 */
+}

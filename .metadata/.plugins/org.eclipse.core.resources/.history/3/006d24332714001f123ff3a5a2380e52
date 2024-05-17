@@ -1,0 +1,8 @@
+#myForm {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px; /* 원하는 폭으로 조정 */
+    height: 200px; /* 원하는 높이로 조정 */
+}
