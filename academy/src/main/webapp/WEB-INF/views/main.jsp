@@ -1,6 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 	
+	<script type="text/javascript" src="/include/js/jquery-3.6.0.min.js"></script>
 	<%@ include file="/WEB-INF/views/header.jsp" %>
+	<script type="text/javascript">
+	$(function(){
+		let errorMsg = "${errorMsg}";
+		if(errorMsg!=""){
+			alert(errorMsg);
+			errorMsg = "";
+		}
+		
+	})// $ 끝
+</script>
 	
 	<div class="content">
 		<div class="fixed_img_col">

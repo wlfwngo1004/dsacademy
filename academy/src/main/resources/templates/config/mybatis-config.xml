@@ -6,7 +6,8 @@
         resultMap을 안 써도 이 코드 쓰면 알아서 바꿔줌 -->
 		<setting name="mapUnderscoreToCamelCase" value="true"/>
 	</settings>
-	<!-- <typeAliases>
-		<typeAlias type="com.ds.academy.client.member.vo.Member" alias="MemberVO"/>	
-	</typeAliases> -->
+	<typeAliases>
+		<typeAlias type="com.ds.academy.client.member.vo.AthoVO" alias="AthoVO"/>
+		<typeAlias type="com.ds.academy.client.member.vo.MemberVO" alias="MemberVO"/>	
+	</typeAliases>
 </configuration>

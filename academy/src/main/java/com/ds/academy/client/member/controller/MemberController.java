@@ -16,15 +16,26 @@ import java.util.Map;
 
 import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.ds.academy.client.member.service.LoginService;
+import com.ds.academy.client.member.vo.AthoVO;
+import com.ds.academy.client.member.vo.MemberVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
@@ -33,10 +44,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/member/*")
 public class MemberController {
 	
-	//private final NaverService naverService;
+	@Setter(onMethod_ = @Autowired)
+	private LoginService loginService;
 	
 	private String CLIENT_ID = "JeQw11B1TjRvCmFW1foW";
 	private String CLI_SECRET = "yeDEG4UYMk";
+	private String userInfo;
 	
 	
 	@GetMapping("/loginForm")
@@ -59,48 +72,95 @@ public class MemberController {
 
 	// 네이버 콜백 페이지
 	@GetMapping("/naver/callback")
-	public String callback(HttpSession session, HttpServletRequest request, Model model) throws IOException, ParseException {
+	public String callback(HttpServletRequest request, Model model) throws IOException, ParseException {
 		
-		 String code = request.getParameter("code"); 
-		 String state = request.getParameter("state"); 
-		 String redirectURI = URLEncoder.encode("http://localhost:8080/member/naver/callback", "UTF-8");
-		 
-		 String apiURL;
-		 apiURL = "https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&";
-		 apiURL += "client_id=" + CLIENT_ID;
-		 apiURL += "&client_secret=" + CLI_SECRET;
-		 apiURL += "&redirect_uri=" + redirectURI;
-		 apiURL += "&code=" + code;
-		 apiURL += "&state=" + state;
-		 System.out.println("apiURL=" + apiURL);
-		 
-		 String res = requestToServer(apiURL);
-		 
-		 if(res != null && !res.equals("")) {
-			 model.addAttribute("res", res);
-			 Map<String, Object> parsedJson = new JSONParser(res).parseObject();
-			 System.out.println(parsedJson);
-			 
-			 session.setAttribute("currentUser", res);
-			 session.setAttribute("currentAT", parsedJson.get("access_token"));
-			 session.setAttribute("currentRT", parsedJson.get("refresh_token"));
-		 } else {
-			 model.addAttribute("res", "Login failed!");
-		 }
+		String code = request.getParameter("code");
+		String state = request.getParameter("state");
 		
-		return "member/check";
+		userInfo = getUserInfoFromNaver(code, state);
+		
+		if(userInfo != null && !userInfo.isEmpty()) {
+			model.addAttribute("userInfo", userInfo);
+			System.out.println(userInfo);
+			return "member/check";
+		}else {
+			model.addAttribute("loginFailedMessage", "사용자 정보를 가져오지 못했습니다.");
+			System.out.println("user Info 못가져옴");
+			return "member/check";
+			
+		}
 		
 	}
 	
-	@ResponseBody
-	@RequestMapping("/naver/getProfile")
-	public String getProfileFromNaver(String accessToken) throws IOException {
-	    // 네이버 로그인 접근 토큰;
-	    String apiURL = "https://openapi.naver.com/v1/nid/me";
-	    String headerStr = "Bearer " + accessToken; // Bearer 다음에 공백 추가
-	    String res = requestToServer(apiURL, headerStr);
-	    return res;
-	  }
+	
+	// 인증번호 확인 & 회원가입 절차
+	@PostMapping("/naver/atho")
+	public String athoCheck(@ModelAttribute AthoVO avo, MemberVO mvo, RedirectAttributes ras, HttpSession session) {
+		log.info("인증번호 체크 호출");
+		
+		// 인증번호 체크 (유효한 인증번호인지!)
+		AthoVO checkAtho = loginService.checkAtho(avo);
+		// 이미 저장한 사용자인지 체크
+		MemberVO checkMember = loginService.checkMember(avo);
+		
+		
+		// userInfo를 JSON 객체로 파싱
+		JSONObject userInfoJson = new JSONObject(userInfo);
+		JSONObject responseJson = userInfoJson.getJSONObject("response");
+		
+		// 사용자 정보 추출
+		String email = responseJson.getString("email");
+		String name = responseJson.getString("name");
+		String gender = responseJson.getString("gender");
+		String mobile = responseJson.getString("mobile");
+		String password = generateRandomPassword();
+		
+		// 이름 유니코드에서 일반 문자열로
+		name = java.text.Normalizer.normalize(name, java.text.Normalizer.Form.NFC);
+		
+		String url = "";
+		
+		// 인증번호가 유효하고 같은 인증번호가 없는 경우 회원가입
+		if(checkAtho != null && checkMember == null) {
+			mvo.setMAthoNum(avo.getMAthoNum());
+			mvo.setEmail(email);
+			mvo.setName(name);
+			mvo.setGender(gender);
+			mvo.setMobile(mobile);
+			mvo.setMPwd(password);
+			
+			int joinMember = loginService.joinMember(mvo);
+			
+			if(joinMember > 0) {
+				session.setAttribute("loginMember", mvo);
+				url = "/";
+			} else {
+				ras.addFlashAttribute("errorMsg", "회원 가입에 실패하였습니다.");
+				url = "/member/loginForm";
+			}
+			
+			 
+		} else if(checkAtho == null){
+			ras.addFlashAttribute("errorMsg", "인증번호가 존재하지 않거나 유효하지 않습니다.");
+			System.out.println(2);
+			url = "/member/loginForm";
+		} else {
+			// 이미 가입한 사용자들 처리.
+			mvo.setMAthoNum(avo.getMAthoNum());
+			mvo.setEmail(email);
+			mvo.setName(name);
+			mvo.setGender(gender);
+			mvo.setMobile(mobile);
+			mvo.setMPwd(password);
+			session.setAttribute("loginMember", mvo);
+			
+			url = "/";
+		}
+		
+		
+		return "redirect:"+url;
+	}
+
 	
 	
 	// 세션 무효화(로그아웃)
@@ -109,6 +169,48 @@ public class MemberController {
 	    session.invalidate();
 	    return "redirect:/member/loginForm";
 	  }
+	
+	
+	// 세션 없이 사용자 정보 추출 & 실제 json 데이터 추출 메소드.
+	private String getUserInfoFromNaver(String code, String state) throws IOException {
+		String redirectURI = URLEncoder.encode("http://localhost:8080/member/naver/callback", "UTF-8");
+		
+		// 네이버 API로 사용자 정보를 가져오기 위한 URL 생성 accessToken 얻기
+		String apiURL = "https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&"
+				+ "client_id=" + CLIENT_ID
+				+ "&client_secret=" + CLI_SECRET
+				+ "&redirect_uri=" + redirectURI
+				+ "&code=" + code
+				+ "&state=" + state;
+		
+		String response = requestToServer(apiURL);
+		
+		// 응답에서 accessToken 추출하여 사용자 정보를 가져오는 URL 생성
+		if(response != null && !response.isEmpty()){
+			JSONObject jsonResponse = new JSONObject(response);
+			String accessToken = jsonResponse.getString("access_token");
+			String userInfoURL = "https://openapi.naver.com/v1/nid/me";
+		    String headerStr = "Bearer " + accessToken; // Bearer 다음에 공백 추가
+		    String userInfoResponse = requestToServer(userInfoURL, headerStr);
+			return userInfoResponse;
+			
+		} else {
+			return null;
+		}		
+	}
+	
+	private String generateRandomPassword() {
+		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
+		SecureRandom random = new SecureRandom();
+		StringBuilder sb = new StringBuilder(10);
+		
+		for(int i = 0; i < 10; i++) {
+			int randomIndex = random.nextInt(characters.length());
+			sb.append(characters.charAt(randomIndex));
+		}
+		
+		return sb.toString();
+	}
 	
 	
 	/**
@@ -155,4 +257,6 @@ public class MemberController {
 	      return null;
 	    }
 	  }
+	  
+	  
 }
