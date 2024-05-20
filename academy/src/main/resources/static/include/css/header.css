@@ -45,10 +45,13 @@ h1 em {
     background-color: #c50000;
     content: '';
     display: block;
-  	position:absolute; right:0; bottom:0;
+  	position: relative; 
+  	right:0; 
+  	bottom:0;
     height: 3px;
     width: 75px;
     margin-bottom: 0.25em;
+    margin-left: 285px;
 }
 
 a {

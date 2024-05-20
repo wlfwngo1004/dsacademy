@@ -1,0 +1,7 @@
+package com.ds.academy.client.member.service;
+
+import com.ds.academy.client.member.vo.AthoVO;
+
+public interface LoginService {
+	public AthoVO checkAtho(AthoVO avo);
+}

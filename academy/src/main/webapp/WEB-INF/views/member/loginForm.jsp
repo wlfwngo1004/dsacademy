@@ -26,6 +26,12 @@
 	
 	$(function(){
 		
+		let errorMsg = "${errorMsg}";
+		if(errorMsg!=""){
+			alert(errorMsg);
+			errorMsg = "";
+		}
+		
 		placeholderEvent($('#email'));
 		placeholderEvent($('#inputPwd'));
 		

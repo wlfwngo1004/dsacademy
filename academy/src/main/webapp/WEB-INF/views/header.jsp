@@ -21,18 +21,18 @@
 	<div class="wrap">
 	<header>
 		<div class="twelve">
-	        <a href="/" class="logo-link"><h1>DS ACADEMY</h1></a>
+	        <a href="/" class="logo-link"><h1>ART ENGLISH LAB</h1></a>
 	          <nav id="nav1">
 			    <ul>
 			      <li><a href="/">홈</a></li>
 			      <li><a href="/">강좌</a></li>
 			      <li><a href="/">Q&A</a>
 			      <li><a href="/">학원위치</a></li>
-			      <c:if test="${empty sessionScope.currentUser}">
+			      <c:if test="${empty sessionScope.loginMember}">
                       <li><a href="/member/loginForm">로그인</a></li>
                       <li><a href="/">회원가입</a></li>
                   </c:if>
-                  <c:if test="${not empty sessionScope.currentUser}">
+                  <c:if test="${not empty sessionScope.loginMember}">
                       <li><a href="/member/naver/invalidate">로그아웃</a></li>
                       <li><a href="/">마이페이지</a></li>
                   </c:if>

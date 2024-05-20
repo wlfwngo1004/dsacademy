@@ -1,0 +1,12 @@
+package com.ds.academy.client.member.dao;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.ds.academy.client.member.vo.AthoVO;
+
+@Mapper
+public interface MemberDao {
+	
+	public AthoVO checkAtho(AthoVO avo);
+
+}
