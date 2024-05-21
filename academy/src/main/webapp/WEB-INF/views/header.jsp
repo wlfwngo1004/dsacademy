@@ -30,7 +30,7 @@
 			      <li><a href="/">학원위치</a></li>
 			      <c:if test="${empty sessionScope.loginMember}">
                       <li><a href="/member/loginForm">로그인</a></li>
-                      <li><a href="/">회원가입</a></li>
+                      <li><a href="/member/normal/join">회원가입</a></li>
                   </c:if>
                   <c:if test="${not empty sessionScope.loginMember}">
                       <li><a href="/member/naver/invalidate">로그아웃</a></li>
