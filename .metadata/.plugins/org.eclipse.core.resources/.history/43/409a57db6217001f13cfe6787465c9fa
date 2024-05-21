@@ -1,0 +1,114 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<script type="text/javascript" src="/include/js/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/include/css/loginForm.css">
+
+<script type="text/javascript">
+
+	function placeholderEvent(inputElement) {
+	    inputElement.click(function(){
+	        if ($(this).val() == '') {
+	            $(this).attr('placeholder', '');
+	        }
+	    });
+	
+	    inputElement.blur(function(){
+	        if ($(this).val() == '') {
+	            $(this).attr('placeholder', $(this).data('placeholder'));
+	        }
+	    });
+	}
+	
+	$(function(){
+			
+		placeholderEvent($('#email'));
+		placeholderEvent($('#inputPwd'));
+		
+		
+		$('#inputMobile').on('input', function() {
+            formatPhoneNumber($(this));
+        }).on('keydown', function(event) {
+            enforceInput(event);
+        });
+        
+        function formatPhoneNumber(input) {
+            // 현재 입력된 값에서 숫자만 추출
+            let value = input.val().replace(/\D/g, '');
+            
+            // 3-4-4 형식으로 하이픈 삽입
+            if (value.length > 3 && value.length <= 7) {
+                value = value.replace(/(\d{3})(\d{1,4})/, '$1-$2');
+            } else if (value.length > 7) {
+                value = value.replace(/(\d{3})(\d{4})(\d{1,4})/, '$1-$2-$3');
+            }
+            
+            // 하이픈을 포함한 전체 길이가 13자리를 초과하는지 확인
+            if (value.length > 13) {
+                alert("더이상 입력할 수 없습니다.");
+                value = value.slice(0, 13);
+            }
+            
+            input.val(value);
+        }
+        
+        function enforceInput(event) {
+            const key = event.key;
+            
+            // 백스페이스를 제외한 키가 눌릴 때
+            if (key !== 'Backspace') {
+                // 숫자가 아닌 키가 눌렸을 때
+                if (!/[\d]/.test(key)) {
+                    alert("숫자만 입력할 수 있습니다.");
+                    event.preventDefault();
+                }
+            }
+        }
+		
+			
+	}) // $종료
+</script>
+	
+	<%@ include file="/WEB-INF/views/header.jsp" %>
+	
+	<div id="wrap2">
+	    <h2 class="joinCss">회원가입</h2>
+	    <div>
+	    	<form id="joinForm">
+	    		<div>
+	    			<label for="user_email" class="labelCss">아이디</label><br>
+	    			<input type="text" id="email" name="email" 
+	    			placeholder="example@naver.com" data-placeholder="example@naver.com"/>
+	    		</div>
+	    		<div>
+	    			<label for="user_pwd" class="labelCss">비밀번호</label><br>
+	    			<input type="text" id="inputPwd" name="mPwd" 
+	    			placeholder="******" data-placeholder="******"/>
+	    		</div>
+	    		<div>
+	    			<label for="user_name" class="labelCss">이름</label><br>
+	    			<input type="text" id="inputName" name="name" />
+	    		</div>
+	    		<div>
+	    			<label id="radioCss">
+	    			<span>남성</span>
+					<input type="radio" name="gender" value="M" checked class="radioCCC"/>
+					</label>
+					<label id="radioCss2">
+					<span>여성</span>
+					<input type="radio" name="gender" value="F" checked class="radioCCC"/>
+					</label>
+	    		</div>
+	    		<div>
+		            <label for="user_mobile" class="labelCss">연락처</label><br>
+		            <input type="text" id="inputMobile" name="mobile" />
+		        </div>
+		        <div>
+	    			<label for="user_name" class="labelCss">이름</label><br>
+	    			<input type="text" id="inputName" name="name" />
+	    		</div>
+	    	</form>
+	    </div>
+    </div>
+	<%@ include file="/WEB-INF/views/footer.jsp" %>
+

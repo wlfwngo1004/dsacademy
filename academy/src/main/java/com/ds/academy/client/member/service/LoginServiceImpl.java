@@ -36,5 +36,12 @@ public class LoginServiceImpl implements LoginService {
 		return joinMember;
 	}
 
+	@Override
+	public MemberVO checkUser(String email) {
+		MemberVO checkUser = null;
+		checkUser = memberDao.checkUser(email);
+		return checkUser;
+	}
+
 	
 }

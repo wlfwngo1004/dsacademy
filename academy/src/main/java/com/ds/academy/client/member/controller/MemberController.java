@@ -72,16 +72,23 @@ public class MemberController {
 
 	// 네이버 콜백 페이지
 	@GetMapping("/naver/callback")
-	public String callback(HttpServletRequest request, Model model) throws IOException, ParseException {
+	public String callback(HttpServletRequest request, MemberVO mvo, Model model, HttpSession session) throws IOException, ParseException {
 		
 		String code = request.getParameter("code");
 		String state = request.getParameter("state");
 		
 		userInfo = getUserInfoFromNaver(code, state);
 		
+		JSONObject userInfoJson = new JSONObject(userInfo);
+		JSONObject responseJson = userInfoJson.getJSONObject("response");
+		
+		String email = responseJson.getString("email");
+		System.out.println(email);
+		
 		if(userInfo != null && !userInfo.isEmpty()) {
-			model.addAttribute("userInfo", userInfo);
-			System.out.println(userInfo);
+			MemberVO checkUser = loginService.checkUser(email);
+			model.addAttribute("userInfo", checkUser);
+			System.out.println(checkUser.getMAthoNum());
 			return "member/check";
 		}else {
 			model.addAttribute("loginFailedMessage", "사용자 정보를 가져오지 못했습니다.");
@@ -165,10 +172,15 @@ public class MemberController {
 	
 	// 세션 무효화(로그아웃)
 	@RequestMapping("/naver/invalidate")
-	  public String invalidateSession(HttpSession session) {
+	public String invalidateSession(HttpSession session) {
 	    session.invalidate();
 	    return "redirect:/member/loginForm";
 	  }
+	
+	@RequestMapping("/normal/join")
+	public String normalJoinPage() {
+		return "member/joinForm";
+	}
 	
 	
 	// 세션 없이 사용자 정보 추출 & 실제 json 데이터 추출 메소드.

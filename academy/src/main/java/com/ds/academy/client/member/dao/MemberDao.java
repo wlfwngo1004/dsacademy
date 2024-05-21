@@ -11,5 +11,7 @@ public interface MemberDao {
 	public AthoVO checkAtho(AthoVO avo);
 	public MemberVO checkMember(AthoVO avo);
 	public int joinMember(MemberVO mvo);
+	
+	public MemberVO checkUser(String email);
 
 }

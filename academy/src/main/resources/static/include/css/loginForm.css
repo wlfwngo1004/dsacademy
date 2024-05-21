@@ -6,7 +6,7 @@
     text-align: center;
 }
 
-.loginCss {
+.loginCss, .joinCss {
 	width:400px;
     text-align: left;
 }
@@ -17,18 +17,51 @@ label {
     display: inline-block; /* 너비를 적용하기 위해 블록 요소로 변경 */
 }
 
+#radioCss{
+	text-align: center;
+	width: 325px;
+}
+
+#radioCss2{
+	text-align: left;
+	width: 325px;
+	margin-bottom: 10px;
+}
+
+.radioCCC{
+	width: 20px;
+	height: 15px;
+	border: 1px;
+	margin-top: 10px;
+}
+
+.error-message {
+    color: red;
+}
+.success-message {
+    color: green;
+}
+.error-bg {
+    background-color: #f8d7da;
+    transition: background-color 0.5s;
+}
+.success-bg {
+    background-color: #d4edda;
+    transition: background-color 0.5s;
+}
+
+
+
 input {
 	width: 395px;
 	height: 40px;
 	margin-top: 5px;
+	margin-bottom: 10px;
 }
-#email{
+#email, #inputPwd, #inputName, #inputGender {
 	margin-bottom: 10px;
 }
 
-#inputPwd{
-	margin-bottom: 10px;
-}
 
 #css1{
 	display: flex;

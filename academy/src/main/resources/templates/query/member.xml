@@ -17,4 +17,10 @@
 		INSERT INTO MEMBER (m_num, m_atho_num, email, m_pwd, name, gender, mobile)
 		VALUES (seq_member.nextval, #{mAthoNum}, #{email}, #{mPwd}, #{name}, #{gender}, #{mobile})
 	</insert>
+	
+	<select id="checkUser" parameterType="string" resultType="MemberVO">
+		SELECT *
+		FROM MEMBER
+		WHERE email = #{email}
+	</select>
 </mapper>
