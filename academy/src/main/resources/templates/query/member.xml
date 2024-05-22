@@ -23,4 +23,16 @@
 		FROM MEMBER
 		WHERE email = #{email}
 	</select>
+	
+	<!-- 중복아이디 체크 -->
+	<select id="checkId" parameterType="MemberVO" resultType="MemberVO">
+		SELECT *
+		FROM MEMBER
+		WHERE email = #{email}
+	</select>
+	
+	<insert id="joinNormalMember" parameterType="MemberVO">
+		INSERT INTO MEMBER(m_num, m_atho_num, email, m_pwd, name, gender, mobile)
+		VALUES (seq_member.nextval, #{mAthoNum}, #{email}, #{mPwd}, #{name}, #{gender}, #{mobile})
+	</insert>
 </mapper>

@@ -50,14 +50,50 @@ label {
     transition: background-color 0.5s;
 }
 
+#checkId{
+	width: 100px;
+	height: 25px;
+	padding: 0px;
+    margin-bottom: 0px;
+    cursor: pointer;
+    margin-left: 240px;
+    background-color: #3498db; /* 기본 배경 색상 */
+    font-weight: 800; /* 글씨 두꺼워지도록 */
+    color: #fff; /* 흰색 글씨색 */
+    border: none; /* 테두리 제거 */
+    border-radius: 5px;
+    transition: background-color 0.3s; /* 배경 색상 변경 시 부드러운 전환 효과 */
+}
 
+#checkId:hover {
+    background-color: #2980b9; /* 마우스를 올렸을 때 더 진한 파랑색 배경 색상 */
+}
+
+#joinBtn{
+	background-color: #3498db; /* 기본 배경 색상 */
+    font-weight: 800; /* 글씨 두꺼워지도록 */
+    color: #fff; /* 흰색 글씨색 */
+    border: none; /* 테두리 제거 */
+    border-radius: 5px;
+    transition: background-color 0.3s; /* 배경 색상 변경 시 부드러운 전환 효과 */
+}
 
 input {
 	width: 395px;
 	height: 40px;
 	margin-top: 5px;
 	margin-bottom: 10px;
+	border: 1px solid #ccc; /* 기본 테두리 두께 */
+    padding: 8px;
+    border-radius: 4px;
+    transition: border 0.3s ease; /* 부드러운 전환 효과 */
 }
+
+input:focus {
+    border: 1px solid #000; /* 포커스 상태에서의 테두리 두께 */
+    outline: none; /* 기본 outline 제거 */
+}
+
 #email, #inputPwd, #inputName, #inputGender {
 	margin-bottom: 10px;
 }

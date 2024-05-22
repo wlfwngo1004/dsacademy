@@ -13,5 +13,7 @@ public interface MemberDao {
 	public int joinMember(MemberVO mvo);
 	
 	public MemberVO checkUser(String email);
-
+	
+	public MemberVO checkId(MemberVO mvo);
+	public int joinNormalMember(MemberVO mvo);
 }

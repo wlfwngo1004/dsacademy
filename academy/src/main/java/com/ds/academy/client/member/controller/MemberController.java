@@ -142,14 +142,13 @@ public class MemberController {
 				session.setAttribute("loginMember", mvo);
 				url = "/";
 			} else {
-				ras.addFlashAttribute("errorMsg", "회원 가입에 실패하였습니다.");
+				ras.addFlashAttribute("errorMsg", "회원가입에 실패하였습니다. 관리자에게 문의 바랍니다.");
 				url = "/member/loginForm";
 			}
 			
 			 
 		} else if(checkAtho == null){
 			ras.addFlashAttribute("errorMsg", "인증번호가 존재하지 않거나 유효하지 않습니다.");
-			System.out.println(2);
 			url = "/member/loginForm";
 		} else {
 			// 이미 가입한 사용자들 처리.
@@ -177,10 +176,66 @@ public class MemberController {
 	    return "redirect:/member/loginForm";
 	  }
 	
+	
+	// --------------------------일반 회원 가입----------------------------------
+	
+	
+	// 회원가입 창
 	@RequestMapping("/normal/join")
 	public String normalJoinPage() {
 		return "member/joinForm";
 	}
+	
+	// 아이디 중복체크 ajax 반환 ResponseBody
+	@PostMapping("/normal/idCheck")
+	@ResponseBody
+	public String idCheck(@ModelAttribute MemberVO mvo) {
+		log.info("중복체크 호출");
+		String result = "";
+		MemberVO idCheck = loginService.checkId(mvo);
+		if(idCheck != null) {
+			result = "중복";
+		} else {
+			result = "성공";
+		}
+		return result;
+	}
+	
+	// 일반 회원가입
+	@PostMapping("/normal/insertProcess")
+	public String joinMember(@ModelAttribute MemberVO mvo, AthoVO avo, RedirectAttributes ras) {
+		log.info(mvo.toString());
+		String url = "";
+		avo.setMAthoNum(mvo.getMAthoNum());
+		AthoVO athoCheck = loginService.checkAtho(avo);
+		MemberVO memberCheck = loginService.checkMember(avo);
+		
+		
+		if(athoCheck != null && memberCheck == null) {
+			// 인증번호가 생성되어 있고 해당 인증번호로 회원으로 등록되지 않은경우에는 회원등록.
+			log.info("존재하는 인증번호 회원으로 등록되지 않은 회원");
+			int joinMember = loginService.joinNormalMember(mvo);
+			if(joinMember > 0) {
+				ras.addFlashAttribute("errorMsg", "회원가입이 완료되었습니다. 로그인 후 사이트를 이용해주세요.");
+				url = "/";
+			}else {
+				ras.addFlashAttribute("errorMsg", "회원가입에 실패하였습니다. 관리자에게 문의 바랍니다.");
+				url = "/member/normal/join";
+			}
+		}else if(athoCheck != null && memberCheck != null) {
+			// 인증번호는 생성된 인증번호이지만 이미 회원으로 등록된 인증번호 -> 이미 사용된 인증번호입니다.
+			ras.addFlashAttribute("errorMsg", "이미 사용된 인증번호 입니다. 관리자에게 옳바른 인증번호를 발급받으세요.");
+			url = "/member/normal/join";
+		}else {
+			// 인증번호 자체가 없는 상태
+			ras.addFlashAttribute("errorMsg", "인증번호가 존재하지 않거나 유효하지 않습니다.");
+			url = "/member/normal/join";
+		}
+		
+		
+		return "redirect:"+url;
+	}
+	
 	
 	
 	// 세션 없이 사용자 정보 추출 & 실제 json 데이터 추출 메소드.

@@ -43,5 +43,19 @@ public class LoginServiceImpl implements LoginService {
 		return checkUser;
 	}
 
+	@Override
+	public MemberVO checkId(MemberVO mvo) {
+		MemberVO checkId = null;
+		checkId = memberDao.checkId(mvo);
+		return checkId;
+	}
+
+	@Override
+	public int joinNormalMember(MemberVO mvo) {
+		int joinNormalMember = 0;
+		joinNormalMember = memberDao.joinNormalMember(mvo);
+		return joinNormalMember;
+	}
+
 	
 }
