@@ -2,43 +2,100 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <script type="text/javascript" src="/include/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="/include/js/common.js"></script>
 <link rel="stylesheet" type="text/css" href="/include/css/loginForm.css">
 
 <script type="text/javascript">
 
-	function placeholderEvent(inputElement) {
-	    inputElement.click(function(){
-	        if ($(this).val() == '') {
-	            $(this).attr('placeholder', '');
-	        }
-	    });
-	
-	    inputElement.blur(function(){
-	        if ($(this).val() == '') {
-	            $(this).attr('placeholder', $(this).data('placeholder'));
-	        }
-	    });
-	}
 	
 	$(function(){
-			
+		
+		let errorMsg = "${errorMsg}";
+		if(errorMsg!=""){
+			alert(errorMsg);
+			errorMsg = "";
+		}
+		
+		let idCheck = false;
+		let idRegCheck = false;
+		let passwordCheck = false;
+		let passwordCheck2 = false;
+		
 		placeholderEvent($('#email'));
 		placeholderEvent($('#inputPwd'));
 		placeholderEvent($('#inputPwd_confirm'));
+		placeholderEvent($('#inputMobile'));
 		
-		// 아이디 정규식
-		$('#email').on('input', function(){
-			validateId();
-		});
+		// 아이디 중복 체크
+		$('#checkId').click(function(){
+			let email = $('#email').val();
+			console.log(email);
+			if($('#email').val()==""){
+				alert("아이디를 입력해주세요.")
+			}else{
+				$.ajax({
+					url:"/member/normal/idCheck",
+					type:"POST",
+					data:{
+						email:email
+					},
+					success: function(data){
+						const emailInput = $('#email');
+						const messageSpan = emailInput.parent().find('span');
+		                
+						if(data == "중복"){
+							alert("중복되는 아이디가 있습니다.");
+							$('#email').val("");
+							if (emailInput.val() === "") {
+					            emailInput.removeClass('error-bg success-bg');
+					            messageSpan.removeClass('error-message success-message');
+					            messageSpan.text('');
+					        }
+							$('#email').focus();
+							idCheck=false;
+						} else {
+							let idRegTest = validateId();
+							if(idRegTest){
+								idCheck = true;
+								emailInput.removeClass('error-bg').addClass('success-bg');
+								messageSpan.removeClass('error-message').addClass('success-message');
+								messageSpan.text('사용 가능한 아이디입니다.');
+							} else {
+								idCheck = false;
+								emailInput.removeClass('success-bg').addClass('error-bg');
+								messageSpan.removeClass('success-message').addClass('error-message');
+								messageSpan.text('유효하지 않은 아이디입니다.');
+							}
+						}
+					}
+				})
+			}
+		}); // 아이디 중복체크 끝 //
+		
+		// 아이디 기입후 지웠을때 초기 input으로 되돌리기.
+		$('#email').on('input', function() {
+	        const emailInput = $(this);
+	        const messageSpan = emailInput.parent().find('span');
+	        
+	        if (emailInput.val() === "") {
+	            emailInput.removeClass('error-bg success-bg');
+	            messageSpan.removeClass('error-message success-message');
+	            messageSpan.text('');
+	            let idCheck = false;
+	        }
+	    });
+		
 		
 		// 비밀번호 정규식
 		$('#inputPwd').on('input', function() {
 		    validatePassword();
 		});
 
+		
 		// 비밀번호 확인
 		$('#inputPwd, #inputPwd_confirm').on('input', function() {
                 validatePassword2();
+                console.log(passwordCheck2);
             });
             
 		// 핸드폰번호 정규식
@@ -48,31 +105,65 @@
             enforceInput(event);
         });
         
+		// 회원가입 처리.
+		$('#joinBtn').click(function(){
+			if(idCheck == false) {
+				alert("아이디 중복체크 및 유효한 아이디인지 확인하세요.");
+				return;
+			}else if(passwordCheck == false){
+				alert("유효한 비밀번호인지 확인하세요.");
+				return;
+			}else if(passwordCheck2 == false){
+				alert("비밀번호 확인을 해주세요.");
+				return;
+			}else{
+				if(!chkData('#email', "아이디를")) return;
+				else if(!chkData('#inputPwd', "비밀번호를")) return;
+				else if(!chkData('#inputPwd_confirm', "비밀번호 확인을")) return;
+				else if(!chkData('#inputName', "이름을")) return;
+				else if(!chkData('#inputMobile', "핸드폰 번호를")) return;
+				else if(!chkData('#inputMathoNum', "인증번호를")) return;
+				else {
+					$('#joinForm').attr({
+						"method" : "post",
+						"action" : "/member/normal/insertProcess"
+					});
+					$('#joinForm').submit();
+				}
+			}
+		}); // 회원가입 처리 완료
 		
-		// 아이디 정규식
 		
-		function validateId() {
-		    const email = $('#email').val();
-		    const idRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,20}$/
-		    const emailInput = $('#email');
-		    const messageSpan = emailInput.parent().find('span');
-		
-		    if (email) {
-		        if (idRegex.test(email)) {
-		            emailInput.removeClass('error-bg').addClass('success-bg');
-		            messageSpan.removeClass('error-message').addClass('success-message');
-		            messageSpan.text('사용 가능한 아이디입니다.');
-		        } else {
-		            emailInput.removeClass('success-bg').addClass('error-bg');
-		            messageSpan.removeClass('success-message').addClass('error-message');
-		            messageSpan.text('사용 불가능한 아이디입니다.');
+		function placeholderEvent(inputElement) {
+		    inputElement.click(function(){
+		        if ($(this).val() == '') {
+		            $(this).attr('placeholder', '');
 		        }
-		    } else {
-		        emailInput.removeClass('error-bg success-bg');
-		        messageSpan.removeClass('error-message success-message');
-		        messageSpan.text('');
-		    }
+		    });
+		
+		    inputElement.blur(function(){
+		        if ($(this).val() == '') {
+		            $(this).attr('placeholder', $(this).data('placeholder'));
+		        }
+		    });
 		}
+		
+		// 아이디 중복체크 후 span 태그 변경위해서!
+		function validateId(){
+			const email = $('#email').val();
+			const emailRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,20}$/
+			const emailInput = $('#email');
+			const messageSpan = emailInput.parent().find('span');
+			let regTest = false;
+			
+			if(emailRegex.test(email)){
+				regTest = true;
+				return regTest;
+			} else {
+				return regTest;
+			}
+		}
+		
         
         // 비밀번호 정규식
         function validatePassword() {
@@ -86,15 +177,18 @@
 		            passwordInput.removeClass('error-bg').addClass('success-bg');
 		            messageSpan.removeClass('error-message').addClass('success-message');
 		            messageSpan.text('사용 가능한 비밀번호입니다.');
+		            passwordCheck = true;
 		        } else {
 		            passwordInput.removeClass('success-bg').addClass('error-bg');
 		            messageSpan.removeClass('success-message').addClass('error-message');
 		            messageSpan.text('사용 불가능한 비밀번호입니다.');
+		            passwordCheck = false;
 		        }
 		    } else {
 		        passwordInput.removeClass('error-bg success-bg');
 		        messageSpan.removeClass('error-message success-message');
 		        messageSpan.text('');
+		        passwordCheck = false;
 		    }
 		}
         
@@ -109,13 +203,16 @@
                 confirmPasswordInput.removeClass('success-bg').addClass('error-bg');
                 messageSpan.removeClass('success-message').addClass('error-message');
                 messageSpan.text('비밀번호가 일치하지 않습니다.');
+                passwordCheck2 = false;
             } else if (password === confirmPassword && confirmPassword !== "") {
                 confirmPasswordInput.removeClass('error-bg').addClass('success-bg');
                 messageSpan.removeClass('error-message').addClass('success-message');
                 messageSpan.text('비밀번호가 일치합니다.');
+                passwordCheck2 = true;
             } else {
                 confirmPasswordInput.removeClass('error-bg success-bg');
                 messageSpan.removeClass('error-message success-message').text('');
+                passwordCheck2 = false;
             }
         }
         
@@ -141,17 +238,17 @@
         }
         // 핸드폰 번호 정규식
         function enforceInput(event) {
-            const key = event.key;
-            
-            // 백스페이스를 제외한 키가 눌릴 때
-            if (key !== 'Backspace') {
-                // 숫자가 아닌 키가 눌렸을 때
-                if (!/[\d]/.test(key)) {
-                    alert("숫자만 입력할 수 있습니다.");
-                    event.preventDefault();
-                }
-            }
-        }
+		    const key = event.key;
+		
+		    // 백스페이스와 탭을 제외한 키가 눌릴 때
+		    if (key !== 'Backspace' && key !== 'Tab') {
+		        // 숫자가 아닌 키가 눌렸을 때
+		        if (!/[\d]/.test(key)) {
+		            alert("숫자만 입력할 수 있습니다.");
+		            event.preventDefault();
+		        }
+		    }
+		}
 		
 			
 	}) // $종료
@@ -164,9 +261,9 @@
 	    <div>
 	    	<form id="joinForm">
 	    		<div>
-	    			<label for="user_email" class="labelCss">아이디</label><br>
+	    			<label for="user_email" class="labelCss">아이디 <input type="button" value="중복확인" id="checkId"/></label><br>
 	    			<input type="text" id="email" name="email" 
-	    			placeholder="영문+숫자 (8글자~20글자)" data-placeholder="영문+숫자 (8글자~20글자)"/><br>
+	    			placeholder="영문+숫자 (8~20글자)" data-placeholder="영문+숫자 (8~20글자)"/><br>
 	    			<span></span>
 	    		</div>
 	    		<div>
@@ -192,16 +289,19 @@
 					</label>
 					<label id="radioCss2">
 					<span>여성</span>
-					<input type="radio" name="gender" value="F" checked class="radioCCC"/>
+					<input type="radio" name="gender" value="F" class="radioCCC"/>
 					</label>
 	    		</div>
 	    		<div>
 		            <label for="user_mobile" class="labelCss">연락처</label><br>
-		            <input type="text" id="inputMobile" name="mobile" />
+		            <input type="text" id="inputMobile" name="mobile" placeholder="010을 포함하여 숫자만 입력하세요" data-placeholder="010을 포함하여 숫자만 입력하세요"/>
 		        </div>
 		        <div>
 	    			<label for="user_mAthoNum" class="labelCss">인증번호</label><br>
 	    			<input type="text" id="inputMathoNum" name="MAthoNum" />
+	    		</div>
+	    		<div>
+	    			<input type="button" value="회원가입" id="joinBtn"/>
 	    		</div>
 	    	</form>
 	    </div>
