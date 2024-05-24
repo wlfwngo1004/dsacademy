@@ -12,6 +12,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.security.SecureRandom;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.tomcat.util.json.JSONParser;
@@ -234,6 +235,34 @@ public class MemberController {
 		
 		
 		return "redirect:"+url;
+	}
+	
+	// 아이디&비밀번호 찾기 화면
+	@RequestMapping("/findPwdForm")
+	public String findPassword() {
+		return "/member/findPasswordForm";
+	}
+	
+	// 아이디 찾기 ajax 데이터
+	@PostMapping("/findId")
+	@ResponseBody
+	public Map<String, Object> findId(@ModelAttribute MemberVO mvo, Model model) {
+		log.info("findId 호출 성공");
+		log.info(mvo.getName() + mvo.getMAthoNum());
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		MemberVO findId = loginService.findId(mvo);
+		
+		if (findId != null) {
+			log.info(findId.toString());
+			resultMap.put("status", "성공");
+			resultMap.put("userId", findId);
+		} else {
+			resultMap.put("status", "실패");
+			resultMap.put("message", "해당하는 아이디가 존재하지 않습니다.");
+		}
+		
+		return resultMap;
 	}
 	
 	

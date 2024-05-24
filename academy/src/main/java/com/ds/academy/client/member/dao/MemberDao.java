@@ -16,4 +16,6 @@ public interface MemberDao {
 	
 	public MemberVO checkId(MemberVO mvo);
 	public int joinNormalMember(MemberVO mvo);
+	
+	public MemberVO findId(MemberVO mvo);
 }

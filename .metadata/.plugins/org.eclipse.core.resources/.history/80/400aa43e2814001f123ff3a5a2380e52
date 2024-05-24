@@ -1,7 +1,0 @@
-.container{
-	text-align: center;
-}
-
-#m_atho_num, loginBtn{
-	height: 50px;
-}

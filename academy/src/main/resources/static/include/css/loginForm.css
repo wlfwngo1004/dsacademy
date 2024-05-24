@@ -85,7 +85,7 @@ input {
 	margin-bottom: 10px;
 	border: 1px solid #ccc; /* 기본 테두리 두께 */
     padding: 8px;
-    border-radius: 4px;
+    border-radius: 5px;
     transition: border 0.3s ease; /* 부드러운 전환 효과 */
 }
 
@@ -107,7 +107,7 @@ input:focus {
     margin-bottom: 20px;
 }
 
-#loginBtn{
+#loginBtn, #findPwdBtn{
 	width: 395px;
     height: 40px;
     background-color: #3498db; /* 기본 배경 색상 */

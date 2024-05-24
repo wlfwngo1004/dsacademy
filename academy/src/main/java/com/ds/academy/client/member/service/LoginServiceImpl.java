@@ -57,5 +57,12 @@ public class LoginServiceImpl implements LoginService {
 		return joinNormalMember;
 	}
 
+	@Override
+	public MemberVO findId(MemberVO mvo) {
+		MemberVO findId = null;
+		findId = memberDao.findId(mvo);
+		return findId;
+	}
+
 	
 }
