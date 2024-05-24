@@ -55,11 +55,11 @@
 	    				placeholder="******" data-placeholder="******"/>
 	    			</div>
 	    			<div id="textRight">
-                        <button class="btn btn-primary" type="button" id="loginBtn">로그인</button>
+                        <input type="button" value="로그인" id="loginBtn"/>
                     </div>
                     <div id="css1">
                     <a href="/member/normal/join" id="join">회원가입</a>
-                    <a href="/member/loginForm" id="find_pwd">비밀번호 찾기</a>
+                    <a href="/member/findPwdForm" id="find_pwd">비밀번호 찾기</a>
                     </div>
 	    		</form>
 	    	</div>
