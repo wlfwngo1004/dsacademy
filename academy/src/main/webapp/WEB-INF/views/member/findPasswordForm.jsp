@@ -34,6 +34,7 @@
 	        }
 	    });
 		
+		// Id 찾기
 		$('#findIdBtn').click(function(){
 			let name = $('#name').val();
 			let mAthoNum = $('#MAthoNum').val();
@@ -52,15 +53,57 @@
 					dataType: 'json',// 응답 데이터를 제이슨 형식으로 받아오자!
 					success: function(data){
 						if(data.status === "성공"){
-							$('#successId').text('아이디 : ' + data.userId.email);
+							$('#successId').text('아이디 : ' + data.userId);
 						}else{
-							$('#successId').text(data.message);
+							$('#successId').html(data.message);
 						}
 					}
 				})
 			}
 			
-		})
+		}); // Id 찾기 ajax 끝
+		
+		// Password 찾기
+		$('#findPwdBtn').click(function(){
+			let name = $('#name2').val();
+			let email = $('#email2').val();
+			let mAthoNum = $('#MAthoNum2').val();
+			console.log(name, email, mAthoNum);
+			if(!chkData('#name2', "이름을")) return;
+			else if(!chkData('#email2', "아이디를")) return;
+			else if(!chkData('#MAthoNum2', "인증번호를"))return;
+			else{
+				$.ajax({
+					url:"/member/findPassword",
+					type:"POST",
+					data:{
+						name:name,
+						email:email,
+						mAthoNum:mAthoNum
+					},
+					dataType:'json',
+					success: function(data){
+						if(data.status === "성공"){
+							$('#successPassword').text('비밀번호 : ' + data.userPassword);
+							$('#successPassword').append('<br><input type="button" id="moveLoginForm"  value = "로그인 하기" class="successBtn"/>');
+							$('#successPassword').append('<input type="button" id="moveUpdatePwdForm"  value = "새로운 비밀번호로 변경하기" class="successBtn"/>');
+							
+							$('#moveLoginForm').click(function(){
+								window.location.href="/member/loginForm";
+							})
+							
+							$('#moveUpdatePwdForm').click(function(){
+								window.location.href="/member/updatePwdForm";
+							})
+							
+						}else{
+							$('#successPassword').html(data.message);
+						}
+					}
+				})
+			}
+		}) // Password 찾기 끝
+		
 		
 	})
 </script>
@@ -103,7 +146,7 @@
                 <input type="text" id="MAthoNum2" name="MAthoNum" class="MAthoNum"
                 placeholder="본인의 인증번호를 입력해주세요" data-placeholder="본인의 인증번호를 입력해주세요"/>
             </div>
-            <span></span>
+            <span id="successPassword"></span>
             <input type="button" value="비밀번호 확인" id="findPwdBtn" class="findBtn"/>
         </form>
     </div>

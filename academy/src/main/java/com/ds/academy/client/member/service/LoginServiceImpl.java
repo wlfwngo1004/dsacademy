@@ -64,5 +64,21 @@ public class LoginServiceImpl implements LoginService {
 		return findId;
 	}
 
+	@Override
+	public MemberVO findPassword(MemberVO mvo) {
+		MemberVO findPassword = null;
+		findPassword = memberDao.findPassword(mvo);
+		return findPassword;
+	}
+
+	@Override
+	public int updatePwd(MemberVO mvo) {
+		int updatePwd = 0;
+		updatePwd = memberDao.updatePwd(mvo);
+		return updatePwd;
+	}
+
+	
+
 	
 }

@@ -50,6 +50,11 @@ label {
     transition: background-color 0.5s;
 }
 
+.forMargin{
+	display: inline-block;
+	margin-bottom: 13px;
+}
+
 #checkId{
 	width: 100px;
 	height: 25px;
@@ -107,7 +112,7 @@ input:focus {
     margin-bottom: 20px;
 }
 
-#loginBtn, #findPwdBtn{
+#loginBtn, #findPwdBtn, .updateBtn{
 	width: 395px;
     height: 40px;
     background-color: #3498db; /* 기본 배경 색상 */
@@ -123,6 +128,19 @@ input:focus {
 #loginBtn:hover {
     background-color: #2980b9; /* 마우스를 올렸을 때 더 진한 파랑색 배경 색상 */
 }
+
+#loginBtn:focus {
+	border: none;
+}
+
+.updateBtn:hover{
+	background-color: #2980b9;
+}
+
+.updateBtn:focus{
+	border: none;	
+}
+
 
 #naverLogin{
 	display: inline-block;

@@ -255,14 +255,82 @@ public class MemberController {
 		
 		if (findId != null) {
 			log.info(findId.toString());
+			
+			// 아이디 마스크 처리
+			String email = findId.getEmail();
+			String maskedUserEmail;
+			if(email.length() > 4) {
+				String visiblePart = email.substring(0, 4);
+				String maskedPart = "*".repeat(email.length()-4);
+				maskedUserEmail = visiblePart + maskedPart;
+			} else {
+				maskedUserEmail = email;
+			}
+			
 			resultMap.put("status", "성공");
-			resultMap.put("userId", findId);
+			resultMap.put("userId", maskedUserEmail);
 		} else {
 			resultMap.put("status", "실패");
-			resultMap.put("message", "해당하는 아이디가 존재하지 않습니다.");
+			resultMap.put("message", "해당하는 아이디가 존재하지 않습니다.<br>사용자 정보를 확인하세요.");
 		}
 		
 		return resultMap;
+	}
+	
+	// 비밀번호 찾기 ajax 데이터
+	@PostMapping("/findPassword")
+	@ResponseBody
+	public Map<String, Object> findPassword(@ModelAttribute MemberVO mvo){
+		log.info("findPassword 호출 성공");
+		log.info(mvo.getName() + mvo.getEmail() + mvo.getMAthoNum());
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		MemberVO findPassword = loginService.findPassword(mvo);
+		
+		
+		if(findPassword != null) {
+			String password = findPassword.getMPwd();
+			String maskedPassword;
+			if(password.length() > 4) {
+				String visiblePart = password.substring(0, 4);
+				String maskedPart = "*".repeat(password.length() - 4);
+				maskedPassword = visiblePart + maskedPart;
+			} else {
+				maskedPassword = password;
+			}
+			
+			resultMap.put("status", "성공");
+			resultMap.put("userPassword", maskedPassword);
+		} else {
+			resultMap.put("status", "실패");
+			resultMap.put("message", "해당하는 아이디 또는 비밀번호가 존재하지 않습니다. <br>사용자 정보를 확인하세요.");
+		}
+		
+		return resultMap;
+	}
+	
+	@RequestMapping("/updatePwdForm")
+	public String updatePwdForm() {
+		log.info("updatePwdForm 호출");
+		return "member/updatePwdForm";
+	}
+	
+	@PostMapping("/updatePwd")
+	public String updatePwd(@ModelAttribute MemberVO mvo, RedirectAttributes ras) {
+		
+		
+		
+		int updatePwdSuccess = loginService.updatePwd(mvo);
+		
+		if(updatePwdSuccess > 0) {
+			log.info("비밀번호 변경 성공");
+			ras.addFlashAttribute("updatePwdSuccess", true);
+			return "redirect:/member/updatePwdForm";
+		} else {
+			ras.addFlashAttribute("errorMsg", "비밀번호 변경에 실패하였습니다. 인증번호를 확인하세요.");
+			return "redirect:/member/updatePwdForm";
+		}
+		
 	}
 	
 	

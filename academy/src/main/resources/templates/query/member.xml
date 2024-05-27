@@ -41,4 +41,17 @@
 		FROM MEMBER
 		WHERE name = #{name} AND m_atho_num = #{mAthoNum}
 	</select>
+	
+	<select id="findPassword" parameterType="MemberVO" resultType="MemberVO">
+		SELECT *
+		FROM MEMBER
+		WHERE name = #{name} AND email = #{email} AND m_atho_num = #{mAthoNum}
+	</select>
+	
+	<update id="updatePwd" parameterType="MemberVO">
+		UPDATE MEMBER
+		SET m_pwd = #{mPwd}
+		WHERE m_atho_num = #{mAthoNum}
+	</update>
+	
 </mapper>
