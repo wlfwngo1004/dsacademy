@@ -14,4 +14,6 @@ public interface LoginService {
 	public int joinNormalMember(MemberVO mvo);
 	
 	public MemberVO findId(MemberVO mvo);
+	public MemberVO findPassword(MemberVO mvo);
+	public int updatePwd(MemberVO mvo);
 }

@@ -45,9 +45,9 @@
 	    	<div>
 	    		<form id="loginForm">
 	    			<div>
-	    				<label for="user_email" class="labelCss">이메일</label><br>
+	    				<label for="user_email" class="labelCss">아이디</label><br>
 	    				<input type="text" id="email" name="user_email" 
-	    				placeholder="example@naver.com" data-placeholder="example@naver.com"/>
+	    				placeholder="아이디 또는 이메일을 입력하세요." data-placeholder="아이디 또는 이메일을 입력하세요"/>
 	    			</div>
 	    			<div>
 	    				<label for="user_pwd" class="labelCss">비밀번호</label><br>
