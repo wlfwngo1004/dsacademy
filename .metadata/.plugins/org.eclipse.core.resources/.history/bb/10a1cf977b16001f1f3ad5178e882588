@@ -1,5 +1,0 @@
-package com.ds.academy.client.member.dao;
-
-public interface MemberDao {
-
-}

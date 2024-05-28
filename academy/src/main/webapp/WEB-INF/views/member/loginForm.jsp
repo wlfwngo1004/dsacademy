@@ -5,6 +5,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <script type="text/javascript" src="/include/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="/include/js/common.js"></script>
 <link rel="stylesheet" type="text/css" href="/include/css/loginForm.css">
 
 <script type="text/javascript">
@@ -35,6 +36,19 @@
 		placeholderEvent($('#email'));
 		placeholderEvent($('#inputPwd'));
 		
+		$('#loginBtn').click(function(){
+			if(!chkData("#email","아이디를")) return;
+			else if(!chkData("#inputPwd","비밀번호를")) return;
+			else {
+				$('#loginForm').attr({
+					"method":"post",
+					"action":"/member/normal/login"
+				});
+				$('#loginForm').submit();
+			}
+		})
+		
+		
 	}) // $종료
 </script>
 	
@@ -46,12 +60,12 @@
 	    		<form id="loginForm">
 	    			<div>
 	    				<label for="user_email" class="labelCss">아이디</label><br>
-	    				<input type="text" id="email" name="user_email" 
+	    				<input type="text" id="email" name="email" 
 	    				placeholder="아이디 또는 이메일을 입력하세요." data-placeholder="아이디 또는 이메일을 입력하세요"/>
 	    			</div>
 	    			<div>
 	    				<label for="user_pwd" class="labelCss">비밀번호</label><br>
-	    				<input type="text" id="inputPwd" name="user_pwd" 
+	    				<input type="password" id="inputPwd" name="MPwd" 
 	    				placeholder="******" data-placeholder="******"/>
 	    			</div>
 	    			<div id="textRight">
@@ -59,7 +73,7 @@
                     </div>
                     <div id="css1">
                     <a href="/member/normal/join" id="join">회원가입</a>
-                    <a href="/member/findPwdForm" id="find_pwd">비밀번호 찾기</a>
+                    <a href="/member/findPwdForm" id="find_pwd">아이디/비밀번호 찾기</a>
                     </div>
 	    		</form>
 	    	</div>

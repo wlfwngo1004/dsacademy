@@ -14,8 +14,8 @@
 	</select>
 	
 	<insert id="joinMember" parameterType="MemberVO">
-		INSERT INTO MEMBER (m_num, m_atho_num, email, m_pwd, name, gender, mobile)
-		VALUES (seq_member.nextval, #{mAthoNum}, #{email}, #{mPwd}, #{name}, #{gender}, #{mobile})
+		INSERT INTO MEMBER (m_num, m_atho_num, email, m_pwd, name, gender, mobile, grade, school_name)
+		VALUES (seq_member.nextval, #{mAthoNum}, #{email}, #{mPwd}, #{name}, #{gender}, #{mobile}, #{grade}, #{schoolName})
 	</insert>
 	
 	<select id="checkUser" parameterType="string" resultType="MemberVO">
@@ -32,8 +32,8 @@
 	</select>
 	
 	<insert id="joinNormalMember" parameterType="MemberVO">
-		INSERT INTO MEMBER(m_num, m_atho_num, email, m_pwd, name, gender, mobile)
-		VALUES (seq_member.nextval, #{mAthoNum}, #{email}, #{mPwd}, #{name}, #{gender}, #{mobile})
+		INSERT INTO MEMBER(m_num, m_atho_num, email, m_pwd, name, gender, mobile, grade, school_name)
+		VALUES (seq_member.nextval, #{mAthoNum}, #{email}, #{mPwd}, #{name}, #{gender}, #{mobile}, #{grade}, #{schoolName})
 	</insert>
 	
 	<select id="findId" parameterType="MemberVO" resultType="MemberVO">
@@ -53,5 +53,11 @@
 		SET m_pwd = #{mPwd}
 		WHERE m_atho_num = #{mAthoNum}
 	</update>
+	
+	<select id="loginMember" parameterType="MemberVO" resultType="MemberVO">
+		SELECT *
+		FROM MEMBER
+		WHERE email = #{email} AND m_pwd = #{mPwd}
+	</select>
 	
 </mapper>

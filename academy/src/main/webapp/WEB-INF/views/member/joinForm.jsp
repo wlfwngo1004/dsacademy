@@ -20,11 +20,14 @@
 		let idRegCheck = false;
 		let passwordCheck = false;
 		let passwordCheck2 = false;
+		let schoolCheck2 = false;
 		
 		placeholderEvent($('#email'));
 		placeholderEvent($('#inputPwd'));
 		placeholderEvent($('#inputPwd_confirm'));
 		placeholderEvent($('#inputMobile'));
+		placeholderEvent($('#inputName'));
+		placeholderEvent($('#inputSchool'));
 		
 		// 아이디 중복 체크
 		$('#checkId').click(function(){
@@ -97,7 +100,22 @@
                 validatePassword2();
                 console.log(passwordCheck2);
             });
+        
+		$('#inputSchool').on('blur', function() {
+            var schoolName = $(this).val().trim();
+            var schoolCheck = $('#schoolCheck');
             
+            if (!schoolName.endsWith('중') && !schoolName.endsWith('고')) {
+                schoolCheck.text("학교명은 '중' 또는 '고'로 끝나야합니다.");
+                $(this).val("").focus(); // 입력값을 초기화하고 포커스 맞춤
+                schoolCheck2=false;
+            } else {
+                schoolCheck.text("");
+                schoolCheck2=true;
+            }
+        });
+   
+		
 		// 핸드폰번호 정규식
 		$('#inputMobile').on('input', function() {
             formatPhoneNumber($(this));
@@ -116,11 +134,15 @@
 			}else if(passwordCheck2 == false){
 				alert("비밀번호 확인을 해주세요.");
 				return;
+			}else if(schoolCheck2 == false){
+				alert("학교명은 '중' 또는 '고'로 끝나야합니다.");
+				return;
 			}else{
 				if(!chkData('#email', "아이디를")) return;
 				else if(!chkData('#inputPwd', "비밀번호를")) return;
 				else if(!chkData('#inputPwd_confirm', "비밀번호 확인을")) return;
 				else if(!chkData('#inputName', "이름을")) return;
+				else if(!chkData('#inputSchool', "학교명을")) return;
 				else if(!chkData('#inputMobile', "핸드폰 번호를")) return;
 				else if(!chkData('#inputMathoNum', "인증번호를")) return;
 				else {
@@ -280,22 +302,42 @@
 	    		</div>
 	    		<div>
 	    			<label for="user_name" class="labelCss">이름</label><br>
-	    			<input type="text" id="inputName" name="name" />
+	    			<input type="text" id="inputName" name="name" placeholder="홍길동" data-placeholder="홍길동"/>
 	    		</div>
 	    		<div>
-	    			<label id="radioCss">
-	    			<span>남성</span>
-					<input type="radio" name="gender" value="M" checked class="radioCCC"/>
-					</label>
-					<label id="radioCss2">
-					<span>여성</span>
-					<input type="radio" name="gender" value="F" class="radioCCC"/>
-					</label>
+	    			<label for="schoolName" class="labelCss">학교명</label><br>
+	    			<input type="text" id="inputSchool" name="schoolName" placeholder="ex)한성여중 or 한성여고 약어로 기입하세요." data-placeholder="ex)한성여중 or 한성여고 약어로 기입하세요."/>
+	    			<br><span id="schoolCheck"></span>
 	    		</div>
+	    		<div>
+		    			<label for="grade" class="labelCss">학년</label><br>
+		    			<label id="radioCss">
+		    			<span>1학년</span>
+						<input type="radio" name="grade" value="1" checked class="radioCCC"/>
+						</label>
+						<label id="radioCss2" class="baba">
+						<span>2학년</span>
+						<input type="radio" name="grade" value="2" class="radioCCC"/>
+						</label>
+						<label id="radioCss3" class="baba">
+						<span>3학년</span>
+						<input type="radio" name="grade" value="3" class="radioCCC"/>
+						</label>
+		    	</div>
 	    		<div>
 		            <label for="user_mobile" class="labelCss">연락처</label><br>
 		            <input type="text" id="inputMobile" name="mobile" placeholder="010을 포함하여 숫자만 입력하세요" data-placeholder="010을 포함하여 숫자만 입력하세요"/>
 		        </div>
+		        <div>
+	    			<label id="radioCss4">
+	    			<span>남성</span>
+					<input type="radio" name="gender" value="M" checked class="radioCCC"/>
+					</label>
+					<label id="radioCss5">
+					<span>여성</span>
+					<input type="radio" name="gender" value="F" class="radioCCC"/>
+					</label>
+	    		</div>
 		        <div>
 	    			<label for="user_mAthoNum" class="labelCss">인증번호</label><br>
 	    			<input type="text" id="inputMathoNum" name="MAthoNum" />
