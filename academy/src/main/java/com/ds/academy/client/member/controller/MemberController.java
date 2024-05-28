@@ -88,9 +88,13 @@ public class MemberController {
 		
 		if(userInfo != null && !userInfo.isEmpty()) {
 			MemberVO checkUser = loginService.checkUser(email);
-			model.addAttribute("userInfo", checkUser);
-			System.out.println(checkUser.getMAthoNum());
-			return "member/check";
+			if(checkUser != null) {
+				model.addAttribute("userInfo", checkUser);
+				System.out.println(checkUser.getMAthoNum());
+				return "member/check";
+			} else {
+				return "member/check";
+			}
 		}else {
 			model.addAttribute("loginFailedMessage", "사용자 정보를 가져오지 못했습니다.");
 			System.out.println("user Info 못가져옴");
@@ -103,8 +107,8 @@ public class MemberController {
 	
 	// 인증번호 확인 & 회원가입 절차
 	@PostMapping("/naver/atho")
-	public String athoCheck(@ModelAttribute AthoVO avo, MemberVO mvo, RedirectAttributes ras, HttpSession session) {
-		log.info("인증번호 체크 호출");
+	public String athoCheck(@ModelAttribute AthoVO avo, @RequestParam(value = "grade", required = false) String grade, @RequestParam(value = "schoolName", required = false) String schoolName, MemberVO mvo, RedirectAttributes ras, HttpSession session) {
+		log.info(avo.getMAthoNum() + grade + schoolName);
 		
 		// 인증번호 체크 (유효한 인증번호인지!)
 		AthoVO checkAtho = loginService.checkAtho(avo);
@@ -136,6 +140,10 @@ public class MemberController {
 			mvo.setGender(gender);
 			mvo.setMobile(mobile);
 			mvo.setMPwd(password);
+			mvo.setGrade(grade);
+			mvo.setSchoolName(schoolName);
+			
+			log.info(mvo.toString());
 			
 			int joinMember = loginService.joinMember(mvo);
 			
@@ -153,13 +161,8 @@ public class MemberController {
 			url = "/member/loginForm";
 		} else {
 			// 이미 가입한 사용자들 처리.
-			mvo.setMAthoNum(avo.getMAthoNum());
-			mvo.setEmail(email);
-			mvo.setName(name);
-			mvo.setGender(gender);
-			mvo.setMobile(mobile);
-			mvo.setMPwd(password);
-			session.setAttribute("loginMember", mvo);
+			log.info(checkMember.toString());
+			session.setAttribute("loginMember", checkMember);
 			
 			url = "/";
 		}
@@ -178,7 +181,24 @@ public class MemberController {
 	  }
 	
 	
-	// --------------------------일반 회원 가입----------------------------------
+	// --------------------------일반 회원 가입--------------------------------------------------------------------------------------
+	
+	@PostMapping("/normal/login")
+	public String normalLogin(@ModelAttribute MemberVO mvo, HttpSession session, RedirectAttributes ras) {
+		log.info(mvo.toString());
+		MemberVO login = loginService.loginMember(mvo);
+		String url = "";
+		
+		if(login != null) {
+			log.info(login.toString());
+			session.setAttribute("loginMember", login);
+			url = "/";
+		} else {
+			ras.addFlashAttribute("errorMsg", "아이디 또는 비밀번호가 옳바르지 않습니다. 확인해주세요.");
+			url = "/member/loginForm";
+		}
+		return "redirect:"+url;
+	}
 	
 	
 	// 회원가입 창

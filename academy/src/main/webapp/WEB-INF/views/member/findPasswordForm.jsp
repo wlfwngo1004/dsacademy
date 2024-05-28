@@ -87,6 +87,7 @@
 							$('#successPassword').text('비밀번호 : ' + data.userPassword);
 							$('#successPassword').append('<br><input type="button" id="moveLoginForm"  value = "로그인 하기" class="successBtn"/>');
 							$('#successPassword').append('<input type="button" id="moveUpdatePwdForm"  value = "새로운 비밀번호로 변경하기" class="successBtn"/>');
+							$('#findPwdBtn').remove();
 							
 							$('#moveLoginForm').click(function(){
 								window.location.href="/member/loginForm";

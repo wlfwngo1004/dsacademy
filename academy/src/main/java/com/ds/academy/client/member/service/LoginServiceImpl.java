@@ -78,6 +78,13 @@ public class LoginServiceImpl implements LoginService {
 		return updatePwd;
 	}
 
+	@Override
+	public MemberVO loginMember(MemberVO mvo) {
+		MemberVO loginMember = null;
+		loginMember = memberDao.loginMember(mvo);
+		return loginMember;
+	}
+
 	
 
 	

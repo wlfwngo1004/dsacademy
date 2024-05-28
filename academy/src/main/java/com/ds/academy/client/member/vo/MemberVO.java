@@ -15,4 +15,6 @@ public class MemberVO {
 	private String name;
 	private String gender;
 	private String mobile;
+	private String grade;
+	private String schoolName;
 }
