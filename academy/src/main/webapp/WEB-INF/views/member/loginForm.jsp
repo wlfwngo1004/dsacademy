@@ -86,7 +86,7 @@
 	    		</a>
 	    	</div>
 	    	<div>
-	    		<a href="/member/loginForm" id="kakaoLogin">
+	    		<a href="${kakaoUrl}" id="kakaoLogin">
 	    			<span class="icon">
 	    				<img src="/image/kakaoIcon.png" alt="kakao">
 	    			</span>

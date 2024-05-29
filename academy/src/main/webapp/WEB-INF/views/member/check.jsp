@@ -15,6 +15,10 @@
 	margin-top: -180px;
 }
 
+#schoolCheck{
+	color: red;
+}
+
 .form-wrapper {
 	text-align: left;
 	border: 1px solid #ccc;
@@ -34,7 +38,7 @@
 }
         
 .labelCss.school, .labelCss.athoNum {
-	margin-top: 20px; /* Adjusted margin-top value for schoolName and mAthoNum */
+	margin-top: 10px; /* Adjusted margin-top value for schoolName and mAthoNum */
 }
         
 #schoolName, #mAthoNum {
@@ -62,7 +66,7 @@
 	margin-right: 5px;
 }
 
-#loginBtn {
+#loginBtn , #loginBtn2{
 	display: block;
 	margin-top: 20px;
 	width: 100%;
@@ -86,7 +90,8 @@
 		
 		
 		$("#loginBtn").click(function(){
-			if(!chkData("#mAthoNum","인증번호를")) return;
+			if(!chkData("#schoolName", "학교명을")) return;
+			else if(!chkData("#mAthoNum","인증번호를")) return;
 			else{
 				$("#athoForm").attr({
 					"method" : "post",
@@ -97,7 +102,28 @@
 		}); // 인증번호 보내기.
 		
 		
+		$('#loginBtn2').click(function(){
+			if(!chkData('#mAthoNum', "인증번호를")) return;
+			else {
+				$("#athoForm").attr({
+					"method" : "post",
+					"action" : "/member/naver/atho"
+				});
+				$("#athoForm").submit();
+			}
+		})
 		
+		$('#schoolName').on('blur', function() {
+            var schoolName = $(this).val().trim();
+            var schoolCheck = $('#schoolCheck');
+            
+            if (!schoolName.endsWith('중') && !schoolName.endsWith('고')) {
+                schoolCheck.text("학교명은 '중' 또는 '고'로 끝나야합니다.");
+                $(this).val("").focus(); // 입력값을 초기화하고 포커스 맞춤
+            } else {
+                schoolCheck.text("");
+            }
+        });
 		
 		
 		function placeholderEvent(inputElement) {
@@ -142,7 +168,8 @@
 		    		</div>
 		    		<div>
 		    			<label for="schoolName" class="labelCss school">학교명</label><br>
-			            <input type="text" id="schoolName" name="schoolName" placeholder="ex)아트고등학교" data-placeholder="ex)아트고등학교">
+			            <input type="text" id="schoolName" name="schoolName" placeholder="ex)한성여중 or 한성여고" data-placeholder="ex)한성여중 or 한성여고">
+			            <br><span id="schoolCheck"></span>
 			        </div>
 			        <div>
 			        	<label for="mAthoNum" class="labelCss athoNum">인증번호</label><br>
@@ -155,7 +182,7 @@
 		        	<label for="mAthoNum" class="labelCss">인증번호</label><br>
 		            <input type="password" id="mAthoNum" name="mAthoNum" value="${userInfo.MAthoNum}">
 		        </div>
-		        <input type="button" value="인증요청" id="loginBtn"/>
+		        <input type="button" value="인증요청" id="loginBtn2"/>
 		        </c:if>
 		    </form>
 	    </div>
