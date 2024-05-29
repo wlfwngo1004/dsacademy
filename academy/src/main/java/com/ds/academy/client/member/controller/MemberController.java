@@ -19,6 +19,7 @@ import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,6 +51,9 @@ public class MemberController {
 	
 	private String CLIENT_ID = "JeQw11B1TjRvCmFW1foW";
 	private String CLI_SECRET = "yeDEG4UYMk";
+	private String KAKAO_RESTAPI_KEY = "3b1bd2aee5ee3965c49f743096da2d8c";
+	private String KAKAO_CLI_SECRET = "uXnrfzdYXuHyzBUHTteRHFvSI19VtEPM";
+	private String KAKAO_REDIRECTURI = "http://localhost:8080/member/kakao/callback";
 	private String userInfo;
 	
 	
@@ -57,17 +61,24 @@ public class MemberController {
 	public String loginForm(HttpSession session, Model model) throws UnsupportedEncodingException, UnknownHostException  {
 		log.info("로그인폼 호출");
 		
+		// 네이버 로그인 인가코드 받기
 		String redirectURI = URLEncoder.encode("http://localhost:8080/member/naver/callback", "UTF-8");
 		
 		SecureRandom random = new SecureRandom();
 		String state = new BigInteger(130, random).toString();
 		String apiURL = "https://nid.naver.com/oauth2.0/authorize?response_type=code";
 		apiURL += String.format("&client_id=%s&redirect_uri=%s&state=%s", CLIENT_ID, redirectURI, state);
-		session.setAttribute("state", state);
+		//session.setAttribute("state", state);
 		
 		model.addAttribute("naverUrl", apiURL);
 		
-		//model.addAttribute("naverUrl", naverService.getNaverLogin());
+		
+		// 카카오 로그인 인가코드 받기
+		String kakaoRidirectURI = URLEncoder.encode("http://localhost:8080/member/kakao/callback", "UTF-8");
+		String kakaoURL = "https://kauth.kakao.com/oauth/authorize?response_type=code";
+		kakaoURL += String.format("&client_id=%s&redirect_uri=%s", KAKAO_RESTAPI_KEY, kakaoRidirectURI);
+		model.addAttribute("kakaoUrl", kakaoURL);
+		log.info(kakaoURL);
 		return "member/loginForm";
 	}
 
@@ -103,6 +114,15 @@ public class MemberController {
 		}
 		
 	}
+	
+	/* 네이버 콜백 페이지
+	@GetMapping("/kakao/callback")
+	public String kakaoCallback(HttpServletRequest request, MemberVO mvo, Model model, HttpSession session) throws IOException, ParseException {
+		String code = request.getParameter("code");
+	
+	
+	}*/
+	
 	
 	
 	// 인증번호 확인 & 회원가입 절차
@@ -335,6 +355,7 @@ public class MemberController {
 		return "member/updatePwdForm";
 	}
 	
+	// 새로운 비밀번호로 변경
 	@PostMapping("/updatePwd")
 	public String updatePwd(@ModelAttribute MemberVO mvo, RedirectAttributes ras) {
 		
@@ -352,6 +373,10 @@ public class MemberController {
 		}
 		
 	}
+	
+	// ---------------------------------------------- 카카오 로그인 구현 -------------------------------------------------------
+	
+	
 	
 	
 	
@@ -395,6 +420,23 @@ public class MemberController {
 		
 		return sb.toString();
 	}
+	
+	/* --카카오 인가코드를 이용해서 accessToken을 가져오기
+	private String getAccessToken(String code) {
+		String tokenUrl = "https://kauth.kakao.com/oauth/token";
+		
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+		
+		Map<String, String> params = new HashMap<>();
+		params.put("grant_type", "authorization_code");
+		params.put("client_id", KAKAO_RESTAPI_KEY);
+		params.put("redirect_uri", KAKAO_REDIRECTURI);
+		params.put("code", code);
+		params.put("client_secret", KAKAO_CLI_SECRET);
+	}*/
+	
 	
 	
 	/**
