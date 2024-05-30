@@ -19,20 +19,29 @@ import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.util.MultiValueMapAdapter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ds.academy.client.member.service.LoginService;
 import com.ds.academy.client.member.vo.AthoVO;
 import com.ds.academy.client.member.vo.MemberVO;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -55,6 +64,7 @@ public class MemberController {
 	private String KAKAO_CLI_SECRET = "uXnrfzdYXuHyzBUHTteRHFvSI19VtEPM";
 	private String KAKAO_REDIRECTURI = "http://localhost:8080/member/kakao/callback";
 	private String userInfo;
+	private Map<String, Object> kakaoUserInfo;
 	
 	
 	@GetMapping("/loginForm")
@@ -115,17 +125,41 @@ public class MemberController {
 		
 	}
 	
-	/* 네이버 콜백 페이지
+	// 카카오 콜백 페이지
 	@GetMapping("/kakao/callback")
-	public String kakaoCallback(HttpServletRequest request, MemberVO mvo, Model model, HttpSession session) throws IOException, ParseException {
+	public String kakaoCallback(HttpServletRequest request, Model model) {
 		String code = request.getParameter("code");
+		String accessToken = getAccessToken(code);
+		log.info("accessToken = " + accessToken);
+		
+		kakaoUserInfo = getKakaoUserInfo(accessToken);
+		
+		JSONObject kakaoUserInfoJson = new JSONObject(kakaoUserInfo);
+		JSONObject responseJson = kakaoUserInfoJson.getJSONObject("kakao_account");
+		
+		log.info(responseJson.toString());
+		
+		String email = responseJson.getString("email");
+		
+		if(kakaoUserInfo != null && !kakaoUserInfo.isEmpty()) {
+			MemberVO checkUser = loginService.checkUser(email);
+			if(checkUser != null) {
+				model.addAttribute("userInfo", checkUser);
+				log.info(checkUser.getMAthoNum());
+				return "member/kakaoCheck";
+			} else {
+				return "member/kakaoCheck";
+			}
+		} else {
+			model.addAttribute("loginFailedMessage", "사용자 정보를 가져오지 못했습니다.");
+			return "member/kakaoCheck";
+		}
+		
+	}
 	
 	
-	}*/
 	
-	
-	
-	// 인증번호 확인 & 회원가입 절차
+	// 네이버 로그인 인증번호 확인 & 회원가입 절차
 	@PostMapping("/naver/atho")
 	public String athoCheck(@ModelAttribute AthoVO avo, @RequestParam(value = "grade", required = false) String grade, @RequestParam(value = "schoolName", required = false) String schoolName, MemberVO mvo, RedirectAttributes ras, HttpSession session) {
 		log.info(avo.getMAthoNum() + grade + schoolName);
@@ -190,7 +224,33 @@ public class MemberController {
 		
 		return "redirect:"+url;
 	}
-
+	
+	/* 카카오 로그인 인증번호 확인 & 회원가입 절차
+	@PostMapping("/kakao/atho")
+	public String kakaoAthoCheck(@ModelAttribute AthoVO avo, @RequestParam(value = "grade", required = false) String grade, @RequestParam(value = "schoolName", required = false) String schoolName, MemberVO mvo, RedirectAttributes ras, HttpSession session) {
+		// 인증번호 체크 (유효한 인증번호인지!)
+		AthoVO checkAtho = loginService.checkAtho(avo);
+		// 이미 저장한 사용자인지 체크
+		MemberVO checkMember = loginService.checkMember(avo);
+		
+		JSONObject kakaoUserInfoJson = new JSONObject(kakaoUserInfo);
+		JSONObject responseJson = kakaoUserInfoJson.getJSONObject("kakao_account");
+		
+		String email = responseJson.getString("email");
+		String name = responseJson.getString("name");
+		String gender = responseJson.getString("gender");
+		if(gender.equals("male")) {
+			gender = "M";
+		} else {
+			gender = "F";
+		}
+		String mobile = responseJson.getString("phone_number");
+		if(mobile.startsWith("+82 ")) {
+			mobile = "010-" + mobile.substring(7);
+		}
+		String password = generateRandomPassword();
+	} */
+	
 	
 	
 	// 세션 무효화(로그아웃)
@@ -421,7 +481,7 @@ public class MemberController {
 		return sb.toString();
 	}
 	
-	/* --카카오 인가코드를 이용해서 accessToken을 가져오기
+	// --카카오 인가코드를 이용해서 accessToken을 가져오기
 	private String getAccessToken(String code) {
 		String tokenUrl = "https://kauth.kakao.com/oauth/token";
 		
@@ -429,13 +489,69 @@ public class MemberController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 		
-		Map<String, String> params = new HashMap<>();
-		params.put("grant_type", "authorization_code");
-		params.put("client_id", KAKAO_RESTAPI_KEY);
-		params.put("redirect_uri", KAKAO_REDIRECTURI);
-		params.put("code", code);
-		params.put("client_secret", KAKAO_CLI_SECRET);
-	}*/
+		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+		params.add("grant_type", "authorization_code");
+		params.add("client_id", KAKAO_RESTAPI_KEY);
+		params.add("redirect_uri", KAKAO_REDIRECTURI);
+		params.add("code", code);
+		params.add("client_secret", KAKAO_CLI_SECRET);
+		
+		HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
+		
+		RestTemplate restTemplate = new RestTemplate();
+		
+		ResponseEntity<String> accessTokenResponse = restTemplate.exchange(
+				tokenUrl,
+				HttpMethod.POST,
+				kakaoTokenRequest,
+				String.class
+				);
+		
+		Map<String, Object> responseBody = new HashMap<>();
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			responseBody = objectMapper.readValue(accessTokenResponse.getBody(), new TypeReference<Map<String, Object>>() {});
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(responseBody != null) {
+			return (String) responseBody.get("access_token");
+		}
+		return null;
+	}
+	
+	// accessToken을 이용해서 카카오 로그인 사용자 정보 추출
+	
+	private Map<String, Object> getKakaoUserInfo(String accessToken) {
+		String userInfoUrl = "https://kapi.kakao.com/v2/user/me";
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", "Bearer " + accessToken);
+		headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+		
+		HttpEntity<MultiValueMap<String, String>> kakaoUserInfoRequest = new HttpEntity<>(headers);
+		
+		RestTemplate restTemplate = new RestTemplate();
+		
+		ResponseEntity<String> userInfoResponse = restTemplate.exchange(
+				userInfoUrl,
+				HttpMethod.GET,
+				kakaoUserInfoRequest,
+				String.class
+				);
+		
+		Map<String, Object> kakaoUserInfo = new HashMap<>();
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			kakaoUserInfo = objectMapper.readValue(userInfoResponse.getBody(), new TypeReference<Map<String, Object>>() {});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return kakaoUserInfo;
+		
+	}
 	
 	
 	
