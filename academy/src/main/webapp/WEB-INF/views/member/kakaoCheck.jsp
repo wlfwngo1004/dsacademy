@@ -107,7 +107,7 @@
 			else {
 				$("#athoForm").attr({
 					"method" : "post",
-					"action" : "/member/naver/atho"
+					"action" : "/member/kakao/atho"
 				});
 				$("#athoForm").submit();
 			}
