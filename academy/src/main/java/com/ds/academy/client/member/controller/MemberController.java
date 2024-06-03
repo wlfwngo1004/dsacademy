@@ -125,39 +125,6 @@ public class MemberController {
 		
 	}
 	
-	// 카카오 콜백 페이지
-	@GetMapping("/kakao/callback")
-	public String kakaoCallback(HttpServletRequest request, Model model) {
-		String code = request.getParameter("code");
-		String accessToken = getAccessToken(code);
-		log.info("accessToken = " + accessToken);
-		
-		kakaoUserInfo = getKakaoUserInfo(accessToken);
-		
-		JSONObject kakaoUserInfoJson = new JSONObject(kakaoUserInfo);
-		JSONObject responseJson = kakaoUserInfoJson.getJSONObject("kakao_account");
-		
-		log.info(responseJson.toString());
-		
-		String email = responseJson.getString("email");
-		
-		if(kakaoUserInfo != null && !kakaoUserInfo.isEmpty()) {
-			MemberVO checkUser = loginService.checkUser(email);
-			if(checkUser != null) {
-				model.addAttribute("userInfo", checkUser);
-				log.info(checkUser.getMAthoNum());
-				return "member/kakaoCheck";
-			} else {
-				return "member/kakaoCheck";
-			}
-		} else {
-			model.addAttribute("loginFailedMessage", "사용자 정보를 가져오지 못했습니다.");
-			return "member/kakaoCheck";
-		}
-		
-	}
-	
-	
 	
 	// 네이버 로그인 인증번호 확인 & 회원가입 절차
 	@PostMapping("/naver/atho")
@@ -225,34 +192,7 @@ public class MemberController {
 		return "redirect:"+url;
 	}
 	
-	/* 카카오 로그인 인증번호 확인 & 회원가입 절차
-	@PostMapping("/kakao/atho")
-	public String kakaoAthoCheck(@ModelAttribute AthoVO avo, @RequestParam(value = "grade", required = false) String grade, @RequestParam(value = "schoolName", required = false) String schoolName, MemberVO mvo, RedirectAttributes ras, HttpSession session) {
-		// 인증번호 체크 (유효한 인증번호인지!)
-		AthoVO checkAtho = loginService.checkAtho(avo);
-		// 이미 저장한 사용자인지 체크
-		MemberVO checkMember = loginService.checkMember(avo);
-		
-		JSONObject kakaoUserInfoJson = new JSONObject(kakaoUserInfo);
-		JSONObject responseJson = kakaoUserInfoJson.getJSONObject("kakao_account");
-		
-		String email = responseJson.getString("email");
-		String name = responseJson.getString("name");
-		String gender = responseJson.getString("gender");
-		if(gender.equals("male")) {
-			gender = "M";
-		} else {
-			gender = "F";
-		}
-		String mobile = responseJson.getString("phone_number");
-		if(mobile.startsWith("+82 ")) {
-			mobile = "010-" + mobile.substring(7);
-		}
-		String password = generateRandomPassword();
-	} */
-	
-	
-	
+
 	// 세션 무효화(로그아웃)
 	@RequestMapping("/naver/invalidate")
 	public String invalidateSession(HttpSession session) {
@@ -436,8 +376,94 @@ public class MemberController {
 	
 	// ---------------------------------------------- 카카오 로그인 구현 -------------------------------------------------------
 	
-	
-	
+	// 카카오 콜백 페이지
+	@GetMapping("/kakao/callback")
+	public String kakaoCallback(HttpServletRequest request, Model model) {
+		String code = request.getParameter("code");
+		String accessToken = getAccessToken(code);
+		log.info("accessToken = " + accessToken);
+			
+		kakaoUserInfo = getKakaoUserInfo(accessToken);
+			
+		JSONObject kakaoUserInfoJson = new JSONObject(kakaoUserInfo);
+		JSONObject responseJson = kakaoUserInfoJson.getJSONObject("kakao_account");
+			
+		log.info(responseJson.toString());
+			
+		String email = responseJson.getString("email");
+			
+		if(kakaoUserInfo != null && !kakaoUserInfo.isEmpty()) {
+			MemberVO checkUser = loginService.checkUser(email);
+			if(checkUser != null) {
+				model.addAttribute("userInfo", checkUser);
+				log.info(checkUser.getMAthoNum());
+				return "member/kakaoCheck";
+			} else {
+				return "member/kakaoCheck";
+			}
+		} else {
+			model.addAttribute("loginFailedMessage", "사용자 정보를 가져오지 못했습니다.");
+			return "member/kakaoCheck";
+		}
+			
+	}
+		
+	// 카카오 로그인 인증번호 확인 & 회원가입 절차
+	@PostMapping("/kakao/atho")
+	public String kakaoAthoCheck(@ModelAttribute AthoVO avo, @RequestParam(value = "grade", required = false) String grade, @RequestParam(value = "schoolName", required = false) String schoolName, MemberVO mvo, RedirectAttributes ras, HttpSession session) {
+		// 인증번호 체크 (유효한 인증번호인지!)
+		AthoVO checkAtho = loginService.checkAtho(avo);
+		// 이미 저장한 사용자인지 체크
+		MemberVO checkMember = loginService.checkMember(avo);
+			
+		JSONObject kakaoUserInfoJson = new JSONObject(kakaoUserInfo);
+		JSONObject responseJson = kakaoUserInfoJson.getJSONObject("kakao_account");
+			
+		String email = responseJson.getString("email");
+		String name = responseJson.getString("name");
+		String gender = responseJson.getString("gender");
+		if(gender.equals("male")) {
+			gender = "M";
+		} else {
+			gender = "F";
+		}
+		String mobile = responseJson.getString("phone_number");
+		if(mobile.startsWith("+82 ")) {
+			mobile = "010-" + mobile.substring(7);
+		}
+		String password = generateRandomPassword();
+		String url = "";
+		
+		if(checkAtho != null && checkMember == null) {
+			mvo.setMAthoNum(avo.getMAthoNum());
+			mvo.setEmail(email);
+			mvo.setName(name);
+			mvo.setGender(gender);
+			mvo.setMobile(mobile);
+			mvo.setMPwd(password);
+			mvo.setGrade(grade);
+			mvo.setSchoolName(schoolName);
+			log.info(mvo.toString());
+			int joinMember = loginService.joinMember(mvo);
+			if(joinMember > 0) {
+				session.setAttribute("loginMember", mvo);
+				url = "/";
+			} else {
+				ras.addFlashAttribute("errorMsg", "회원가입에 실패하였습니다. 관리자에게 문의 바랍니다.");
+				url = "/member/loginForm";
+			}
+		} else if (checkAtho == null) {
+			ras.addFlashAttribute("errorMsg", "인증번호가 존재하지 않거나 유효하지 않습니다.");
+			url = "/member/loginForm";
+		} else {
+			// 이미 가입한 사용자들 처리.
+			log.info(checkMember.toString());
+			session.setAttribute("loginMember", checkMember);
+			
+			url = "/";
+		}
+		return "redirect:"+url;
+	} 
 	
 	
 	// 세션 없이 사용자 정보 추출 & 실제 json 데이터 추출 메소드.

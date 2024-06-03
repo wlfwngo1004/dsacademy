@@ -1,0 +1,25 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<script type="text/javascript" src="/include/js/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/include/css/loginForm.css">
+
+
+
+<script type="text/javascript">
+
+	$(function(){
+		
+	})
+
+</script>
+	
+	<%@ include file="/WEB-INF/views/header.jsp" %>
+	
+	<div id="wrap2">
+	    <h1>Test YouTube Video</h1>
+    <!-- 여기에 비디오 ID를 넣습니다 -->
+    <iframe width="240" height="200" src="https://www.youtube.com/embed/T7ewJm3YjW8" frameborder="0" allowfullscreen></iframe>
+    </div>
+	<%@ include file="/WEB-INF/views/footer.jsp" %>
+
